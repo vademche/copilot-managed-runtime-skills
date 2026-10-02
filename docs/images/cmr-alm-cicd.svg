@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="1200" height="620" font-family="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" role="img" aria-label="Delivery models for CMR apps">
+<title>Delivery models for CMR apps</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker></defs>
+<rect width="1200" height="620" fill="#F8FAFC"/>
+<text x="32" y="50" font-size="26" fill="#0F172A" font-weight="700">Delivery models for CMR apps</text>
+<text x="32" y="76" font-size="15" fill="#475569">Pick one per app — the repository model is permanent</text>
+<rect x="32" y="108" width="1136" height="112" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="48" y="138" font-size="16" fill="#14532D" font-weight="700">A · Platform build</text>
+<text x="48" y="160" font-size="12.5" fill="#14532D">most teams</text>
+<text x="48" y="178" font-size="12.5" fill="#14532D">simplest provenance</text>
+<rect x="300" y="136" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/>
+<text x="375" y="170" font-size="13" fill="#14532D" text-anchor="middle">git push</text>
+<line x1="450" y1="165" x2="470" y2="165" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="472" y="136" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/>
+<text x="547" y="170" font-size="13" fill="#14532D" text-anchor="middle">CMR cloud build</text>
+<line x1="622" y1="165" x2="642" y2="165" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="644" y="136" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/>
+<text x="719" y="170" font-size="13" fill="#14532D" text-anchor="middle">preview</text>
+<line x1="794" y1="165" x2="814" y2="165" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="816" y="136" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/>
+<text x="891" y="161" font-size="13" fill="#14532D" text-anchor="middle">deploy</text>
+<text x="891" y="179" font-size="13" fill="#14532D" text-anchor="middle">--commit &lt;sha&gt;</text>
+<line x1="966" y1="165" x2="986" y2="165" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="988" y="136" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/>
+<text x="1063" y="170" font-size="13" fill="#14532D" font-weight="700" text-anchor="middle">live</text>
+<rect x="32" y="240" width="1136" height="112" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="48" y="270" font-size="16" fill="#4C1D95" font-weight="700">B · External artifacts</text>
+<text x="48" y="292" font-size="12.5" fill="#4C1D95">regulated SDLC</text>
+<text x="48" y="310" font-size="12.5" fill="#4C1D95">admin must allow</text>
+<text x="48" y="328" font-size="12.5" fill="#4C1D95">external artifacts</text>
+<rect x="300" y="268" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#7C3AED" stroke-width="1.2"/>
+<text x="375" y="302" font-size="13" fill="#4C1D95" text-anchor="middle">PR + checks</text>
+<line x1="450" y1="297" x2="470" y2="297" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="472" y="268" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#7C3AED" stroke-width="1.2"/>
+<text x="547" y="293" font-size="13" fill="#4C1D95" text-anchor="middle">CI: lint · test</text>
+<text x="547" y="311" font-size="13" fill="#4C1D95" text-anchor="middle">· scan</text>
+<line x1="622" y1="297" x2="642" y2="297" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="644" y="268" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#7C3AED" stroke-width="1.2"/>
+<text x="719" y="302" font-size="13" fill="#4C1D95" text-anchor="middle">ms-app-pack</text>
+<line x1="794" y1="297" x2="814" y2="297" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="816" y="268" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#7C3AED" stroke-width="1.2"/>
+<text x="891" y="293" font-size="13" fill="#4C1D95" text-anchor="middle">environment</text>
+<text x="891" y="311" font-size="13" fill="#4C1D95" text-anchor="middle">approval</text>
+<line x1="966" y1="297" x2="986" y2="297" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="988" y="268" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#7C3AED" stroke-width="1.2"/>
+<text x="1063" y="293" font-size="13" fill="#4C1D95" font-weight="700" text-anchor="middle">ms-app-deploy</text>
+<text x="1063" y="311" font-size="13" fill="#4C1D95" font-weight="700" text-anchor="middle">(service principal)</text>
+<rect x="32" y="372" width="1136" height="112" rx="12" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/>
+<text x="48" y="402" font-size="16" fill="#0C4A6E" font-weight="700">C · ALM overlays (preview)</text>
+<text x="48" y="424" font-size="12.5" fill="#0C4A6E">managed-project tenants</text>
+<text x="48" y="442" font-size="12.5" fill="#0C4A6E">preview feature</text>
+<rect x="300" y="400" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.2"/>
+<text x="375" y="434" font-size="13" fill="#0C4A6E" text-anchor="middle">MS_CLI_ALM=true</text>
+<line x1="450" y1="429" x2="470" y2="429" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="472" y="400" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.2"/>
+<text x="547" y="425" font-size="13" fill="#0C4A6E" text-anchor="middle">deploy</text>
+<text x="547" y="443" font-size="13" fill="#0C4A6E" text-anchor="middle">--deployment test</text>
+<line x1="622" y1="429" x2="642" y2="429" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="644" y="400" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.2"/>
+<text x="719" y="434" font-size="13" fill="#0C4A6E" text-anchor="middle">validate in test</text>
+<line x1="794" y1="429" x2="814" y2="429" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="816" y="400" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.2"/>
+<text x="891" y="434" font-size="13" fill="#0C4A6E" text-anchor="middle">approval</text>
+<line x1="966" y1="429" x2="986" y2="429" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="988" y="400" width="150" height="58" rx="8" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.2"/>
+<text x="1063" y="425" font-size="13" fill="#0C4A6E" font-weight="700" text-anchor="middle">deploy</text>
+<text x="1063" y="443" font-size="13" fill="#0C4A6E" font-weight="700" text-anchor="middle">--deployment prod</text>
+<text x="32" y="520" font-size="12" fill="#64748B" font-weight="700" letter-spacing="1.2">GUARDRAILS</text>
+<rect x="32" y="532" width="366" height="28" rx="14.0" fill="#F1F5F9" stroke="#64748B" stroke-width="1.2"/>
+<text x="215.0" y="550.4642857142857" font-size="12.5" fill="#1E293B" text-anchor="middle">one service principal per environment</text>
+<rect x="412" y="532" width="366" height="28" rx="14.0" fill="#F1F5F9" stroke="#64748B" stroke-width="1.2"/>
+<text x="595.0" y="550.4642857142857" font-size="12.5" fill="#1E293B" text-anchor="middle">environment-scoped secrets + required reviewers</text>
+<rect x="792" y="532" width="366" height="28" rx="14.0" fill="#F1F5F9" stroke="#64748B" stroke-width="1.2"/>
+<text x="975.0" y="550.4642857142857" font-size="12.5" fill="#1E293B" text-anchor="middle">pin actions &amp; CLI to immutable versions</text>
+<rect x="32" y="568" width="366" height="28" rx="14.0" fill="#F1F5F9" stroke="#64748B" stroke-width="1.2"/>
+<text x="215.0" y="586.4642857142857" font-size="12.5" fill="#1E293B" text-anchor="middle">set the action's cloud input explicitly</text>
+<rect x="412" y="568" width="366" height="28" rx="14.0" fill="#F1F5F9" stroke="#64748B" stroke-width="1.2"/>
+<text x="595.0" y="586.4642857142857" font-size="12.5" fill="#1E293B" text-anchor="middle">never deploy with --force from CI</text>
+<rect x="792" y="568" width="366" height="28" rx="14.0" fill="#F1F5F9" stroke="#64748B" stroke-width="1.2"/>
+<text x="975.0" y="586.4642857142857" font-size="12.5" fill="#1E293B" text-anchor="middle">tag releases → rollback by SHA</text>
+</svg>

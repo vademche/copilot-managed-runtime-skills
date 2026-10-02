@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" font-family="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" role="img" aria-label="From citizen app to pro-code — without a rewrite">
+<title>From citizen app to pro-code — without a rewrite</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker></defs>
+<rect width="1200" height="600" fill="#F8FAFC"/>
+<text x="32" y="50" font-size="26" fill="#0F172A" font-weight="700">From citizen app to pro-code — without a rewrite</text>
+<text x="32" y="76" font-size="15" fill="#475569">Same app ID · same inventory entry · same sharing · same Git history</text>
+<text x="32" y="112" font-size="12" fill="#64748B" font-weight="700" letter-spacing="1.2">CITIZEN MAKER</text>
+<rect x="32" y="120" width="262" height="86" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="46" y="146" font-size="16" fill="#78350F" font-weight="700">Describe</text>
+<text x="46" y="167" font-size="13" fill="#78350F">Copilot Studio (apps)</text>
+<text x="46" y="186" font-size="13" fill="#78350F">or Copilot Cowork</text>
+<line x1="294" y1="163" x2="320" y2="163" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="322" y="120" width="262" height="86" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="336" y="146" font-size="16" fill="#78350F" font-weight="700">AI generates</text>
+<text x="336" y="167" font-size="13" fill="#78350F">React app + Git repo</text>
+<text x="336" y="186" font-size="13" fill="#78350F">+ data connections</text>
+<line x1="584" y1="163" x2="610" y2="163" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="612" y="120" width="262" height="86" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="626" y="146" font-size="16" fill="#78350F" font-weight="700">Publish &amp; share</text>
+<text x="626" y="167" font-size="13" fill="#78350F">groups, not individuals</text>
+<text x="626" y="186" font-size="13" fill="#78350F">publish ≠ share</text>
+<line x1="874" y1="163" x2="900" y2="163" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="902" y="120" width="262" height="86" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="916" y="146" font-size="16" fill="#78350F" font-weight="700">Grant edit</text>
+<text x="916" y="167" font-size="13" fill="#78350F">ms app share &lt;dev&gt;</text>
+<text x="916" y="186" font-size="13" fill="#78350F">--access edit</text>
+<line x1="1033" y1="206" x2="1033" y2="272" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<text x="32" y="264" font-size="12" fill="#64748B" font-weight="700" letter-spacing="1.2">PRO DEVELOPER</text>
+<rect x="32" y="272" width="262" height="102" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="46" y="298" font-size="16" fill="#1E3A8A" font-weight="700">Harden</text>
+<text x="46" y="319" font-size="13" fill="#1E3A8A">wrap generated services</text>
+<text x="46" y="338" font-size="13" fill="#1E3A8A">local storage → SharePoint/DV</text>
+<text x="46" y="357" font-size="13" fill="#1E3A8A">2 owners · group sharing</text>
+<rect x="322" y="272" width="262" height="102" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="336" y="298" font-size="16" fill="#1E3A8A" font-weight="700">Assess</text>
+<text x="336" y="319" font-size="13" fill="#1E3A8A">cmr-review: data, sample</text>
+<text x="336" y="338" font-size="13" fill="#1E3A8A">data, errors, connectors</text>
+<rect x="612" y="272" width="262" height="102" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="626" y="298" font-size="16" fill="#1E3A8A" font-weight="700">Clone</text>
+<text x="626" y="319" font-size="13" fill="#1E3A8A">ms app list --permission edit</text>
+<text x="626" y="338" font-size="13" fill="#1E3A8A">ms app clone --app &lt;id&gt;</text>
+<rect x="902" y="272" width="262" height="102" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="916" y="298" font-size="16" fill="#1E3A8A" font-weight="700">Run locally</text>
+<text x="916" y="319" font-size="13" fill="#1E3A8A">npm install</text>
+<text x="916" y="338" font-size="13" fill="#1E3A8A">ms app dev</text>
+<line x1="902" y1="323" x2="876" y2="323" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="612" y1="323" x2="586" y2="323" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="322" y1="323" x2="296" y2="323" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="163" y1="374" x2="163" y2="420" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="32" y="420" width="552" height="70" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="46" y="446" font-size="16" fill="#14532D" font-weight="700">Ship through the normal loop</text>
+<text x="46" y="467" font-size="13" fill="#14532D">PR → build → preview → deploy to live → tell the maker what changed</text>
+<text x="616" y="412" font-size="12" fill="#64748B" font-weight="700" letter-spacing="1.2">AGREE THE OPERATING MODEL</text>
+<rect x="616" y="420" width="176" height="70" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="630" y="446" font-size="14" fill="#4C1D95" font-weight="700">Pro-dev owns</text>
+<text x="630" y="465.5" font-size="11.5" fill="#4C1D95">business-critical;</text>
+<text x="630" y="483.0" font-size="11.5" fill="#4C1D95">changes via PR</text>
+<rect x="802" y="420" width="176" height="70" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="816" y="446" font-size="14" fill="#4C1D95" font-weight="700">Shared</text>
+<text x="816" y="465.5" font-size="11.5" fill="#4C1D95">maker iterates UI; dev</text>
+<text x="816" y="483.0" font-size="11.5" fill="#4C1D95">in short branches</text>
+<rect x="988" y="420" width="176" height="70" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="1002" y="446" font-size="14" fill="#4C1D95" font-weight="700">Hand back</text>
+<text x="1002" y="465.5" font-size="11.5" fill="#4C1D95">dev fixes one thing,</text>
+<text x="1002" y="483.0" font-size="11.5" fill="#4C1D95">maker continues</text>
+<text x="32" y="534" font-size="13.5" fill="#9F1239">Don'ts: rewrite the app from scratch · hand-edit connection code Copilot Studio generated · keep business data in browser storage</text>
+<text x="32" y="558" font-size="13.5" fill="#9F1239">· assume pushing updates users (only deploy/publish does) · move to an external repo without planning a new app ID.</text>
+</svg>

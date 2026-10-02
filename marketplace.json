@@ -1,0 +1,20 @@
+{
+  "name": "copilot-managed-runtime-skills",
+  "owner": {
+    "name": "vademche",
+    "url": "https://github.com/vademche"
+  },
+  "metadata": {
+    "description": "Community plugin marketplace for Microsoft Copilot Managed Runtime: skills, agents and hooks for GitHub Copilot CLI, Claude Code and other coding agents.",
+    "version": "0.1.0",
+    "pluginRoot": "."
+  },
+  "plugins": [
+    {
+      "name": "copilot-managed-runtime",
+      "source": "./plugins/copilot-managed-runtime",
+      "description": "Build, govern and operate apps on Microsoft Copilot Managed Runtime (ms CLI + @microsoft/managed-apps SDK) with end-to-end best practices and anti-patterns.",
+      "version": "0.1.0"
+    }
+  ]
+}

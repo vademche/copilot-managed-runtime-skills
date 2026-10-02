@@ -1,0 +1,26 @@
+{
+  "name": "copilot-managed-runtime",
+  "version": "0.1.0",
+  "description": "Skills, agents and guard-rail hooks for building, governing and operating apps on Microsoft Copilot Managed Runtime (ms CLI + @microsoft/managed-apps SDK): create, data sources, Dataverse, MCP/Work IQ, CSP, ALM/CI-CD, sharing, citizen-to-pro-dev handoff, licensing and admin governance.",
+  "author": {
+    "name": "vademche",
+    "url": "https://github.com/vademche"
+  },
+  "homepage": "https://github.com/vademche/copilot-managed-runtime-skills",
+  "repository": "https://github.com/vademche/copilot-managed-runtime-skills",
+  "license": "MIT",
+  "keywords": [
+    "copilot-managed-runtime",
+    "managed-apps",
+    "ms-cli",
+    "power-platform",
+    "dataverse",
+    "mcp",
+    "work-iq",
+    "governance",
+    "dlp",
+    "alm",
+    "github-copilot",
+    "skills"
+  ]
+}

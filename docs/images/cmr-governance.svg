@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640" font-family="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" role="img" aria-label="Governing Copilot Managed Runtime">
+<title>Governing Copilot Managed Runtime</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker></defs>
+<rect width="1200" height="640" fill="#F8FAFC"/>
+<text x="32" y="50" font-size="26" fill="#0F172A" font-weight="700">Governing Copilot Managed Runtime</text>
+<text x="32" y="76" font-size="15" fill="#475569">Environment groups decide who builds where, what apps can touch and who can see them</text>
+<rect x="32" y="108" width="260" height="92" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="46" y="134" font-size="16" fill="#78350F" font-weight="700">Everyone</text>
+<text x="46" y="155" font-size="13" fill="#78350F">security group → routing rule</text>
+<text x="46" y="174" font-size="13" fill="#78350F">citizens &amp; casual makers</text>
+<rect x="32" y="222" width="260" height="92" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="46" y="248" font-size="16" fill="#1E3A8A" font-weight="700">Pro-dev group</text>
+<text x="46" y="269" font-size="13" fill="#1E3A8A">security group → routing rule</text>
+<text x="46" y="288" font-size="13" fill="#1E3A8A">trained developers</text>
+<rect x="32" y="336" width="260" height="92" rx="12" fill="#F1F5F9" stroke="#64748B" stroke-width="1.5"/>
+<text x="46" y="362" font-size="16" fill="#1E293B" font-weight="700">No rule matches</text>
+<text x="46" y="383" font-size="13" fill="#1E293B">maker cannot create apps</text>
+<text x="46" y="402" font-size="13" fill="#1E293B">(routing cannot be disabled)</text>
+<line x1="292" y1="154" x2="352" y2="154" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="292" y1="268" x2="352" y2="268" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="356" y="108" width="286" height="320" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="370" y="134" font-size="14.5" fill="#78350F" font-weight="700">Default group (Microsoft-managed)</text>
+<rect x="368" y="150" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#D97706" stroke-width="1"/>
+<text x="380" y="173" font-size="14" fill="#78350F" font-weight="700">Routing</text>
+<text x="380" y="194" font-size="12.5" fill="#78350F">personal developer environment</text>
+<rect x="368" y="218" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#D97706" stroke-width="1"/>
+<text x="380" y="241" font-size="14" fill="#78350F" font-weight="700">Connectors + MCP</text>
+<text x="380" y="262" font-size="12.5" fill="#78350F">18 Entra-only first-party + MCP list</text>
+<rect x="368" y="286" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#D97706" stroke-width="1"/>
+<text x="380" y="309" font-size="14" fill="#78350F" font-weight="700">Sharing</text>
+<text x="380" y="330" font-size="12.5" fill="#78350F">org-wide; share links blocked</text>
+<rect x="368" y="354" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#D97706" stroke-width="1"/>
+<text x="380" y="377" font-size="14" fill="#78350F" font-weight="700">CSP</text>
+<text x="380" y="398" font-size="12.5" fill="#78350F">strict — 'self' only</text>
+<rect x="656" y="108" width="286" height="320" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="670" y="134" font-size="14.5" fill="#1E3A8A" font-weight="700">Custom group (admin-defined)</text>
+<rect x="668" y="150" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#2563EB" stroke-width="1"/>
+<text x="680" y="173" font-size="14" fill="#1E3A8A" font-weight="700">Routing</text>
+<text x="680" y="194" font-size="12.5" fill="#1E3A8A">team/dev environments</text>
+<rect x="668" y="218" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#2563EB" stroke-width="1"/>
+<text x="680" y="241" font-size="14" fill="#1E3A8A" font-weight="700">Connectors + MCP</text>
+<text x="680" y="262" font-size="12.5" fill="#1E3A8A">wider allow-list, action-level blocks</text>
+<rect x="668" y="286" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#2563EB" stroke-width="1"/>
+<text x="680" y="309" font-size="14" fill="#1E3A8A" font-weight="700">Sharing</text>
+<text x="680" y="330" font-size="12.5" fill="#1E3A8A">groups, guests per tenant policy</text>
+<rect x="668" y="354" width="262" height="58" rx="8" fill="#FFFFFF" stroke="#2563EB" stroke-width="1"/>
+<text x="680" y="377" font-size="14" fill="#1E3A8A" font-weight="700">CSP</text>
+<text x="680" y="398" font-size="12.5" fill="#1E3A8A">pre-approved origins (e.g. telemetry)</text>
+<rect x="964" y="108" width="206" height="320" rx="12" fill="#0F172A" stroke="#0F172A" stroke-width="1.5"/>
+<text x="980" y="136" font-size="13" fill="#F8FAFC" font-weight="700" letter-spacing="1.2">AT RUNTIME</text>
+<text x="980" y="168" font-size="13.5" fill="#E2E8F0">Entra sign-in +</text>
+<text x="980" y="186" font-size="13.5" fill="#E2E8F0">Conditional Access</text>
+<text x="980" y="214" font-size="13.5" fill="#E2E8F0">Connector / MCP</text>
+<text x="980" y="232" font-size="13.5" fill="#E2E8F0">policy (ACP)</text>
+<text x="980" y="260" font-size="13.5" fill="#E2E8F0">+ DLP — the most</text>
+<text x="980" y="278" font-size="13.5" fill="#E2E8F0">restrictive wins</text>
+<text x="980" y="306" font-size="13.5" fill="#E2E8F0">CSP enforced in</text>
+<text x="980" y="324" font-size="13.5" fill="#E2E8F0">the browser</text>
+<text x="980" y="352" font-size="13.5" fill="#E2E8F0">Licence check per</text>
+<text x="980" y="370" font-size="13.5" fill="#E2E8F0">launch / API call</text>
+<line x1="942" y1="268" x2="962" y2="268" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<text x="32" y="470" font-size="12" fill="#64748B" font-weight="700" letter-spacing="1.2">OBSERVE &amp; RESPOND</text>
+<rect x="32" y="480" width="218" height="72" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="46" y="506" font-size="14.5" fill="#14532D" font-weight="700">Inventory</text>
+<text x="46" y="526" font-size="12" fill="#14532D">MAC + PPAC · block or delete apps</text>
+<rect x="262" y="480" width="218" height="72" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="276" y="506" font-size="14.5" fill="#14532D" font-weight="700">Monitor</text>
+<text x="276" y="526" font-size="12" fill="#14532D">open rate · TTI P75 · data calls</text>
+<rect x="492" y="480" width="218" height="72" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="506" y="506" font-size="14.5" fill="#14532D" font-weight="700">Alerts</text>
+<text x="506" y="526" font-size="12" fill="#14532D">up to 10 per tenant</text>
+<rect x="722" y="480" width="218" height="72" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="736" y="506" font-size="14.5" fill="#14532D" font-weight="700">Purview audit</text>
+<text x="736" y="526" font-size="12" fill="#14532D">create · build · deploy · launch</text>
+<rect x="952" y="480" width="218" height="72" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="966" y="506" font-size="14.5" fill="#14532D" font-weight="700">Cost</text>
+<text x="966" y="526" font-size="12" fill="#14532D">Copilot Credits consumption</text>
+<text x="32" y="590" font-size="13.5" fill="#9F1239">⚠  git push to the platform repo is not audited — use an external GitHub Enterprise Cloud repo with branch protection</text>
+<text x="32" y="612" font-size="13.5" fill="#9F1239">and audit-log streaming where code-change audit is required.</text>
+</svg>

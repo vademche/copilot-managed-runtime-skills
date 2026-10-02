@@ -1,0 +1,32 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/validate.mjs
+      - name: Hook smoke test
+        run: |
+          mkdir -p /tmp/p/generated && echo '{}' > /tmp/p/ms.config.json
+          out=$(echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/p/generated/x.ts"}}' | node plugins/copilot-managed-runtime/hooks/guard-generated.mjs)
+          echo "$out" | grep -q '"deny"'
+          out=$(echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/p/src/x.ts"}}' | node plugins/copilot-managed-runtime/hooks/guard-generated.mjs)
+          test -z "$out"
+      - name: Install script smoke test
+        run: |
+          node scripts/install.mjs /tmp/agent --agents
+          test -f /tmp/agent/skills/cmr-overview/SKILL.md
+          test -f /tmp/agent/references/anti-patterns.md
+          test -f /tmp/agent/agents/cmr-reviewer.md

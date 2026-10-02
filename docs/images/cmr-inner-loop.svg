@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 590" width="1200" height="590" font-family="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" role="img" aria-label="The CMR inner loop">
+<title>The CMR inner loop</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker></defs>
+<rect width="1200" height="590" fill="#F8FAFC"/>
+<text x="32" y="50" font-size="26" fill="#0F172A" font-weight="700">The CMR inner loop</text>
+<text x="32" y="76" font-size="15" fill="#475569">From local dev to live in seven verbs — and a one-command rollback</text>
+<rect x="24" y="262" width="150" height="104" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="99.0" y="288" font-size="15" fill="#1E3A8A" font-weight="700" text-anchor="middle">ms app dev</text>
+<text x="99.0" y="308.5" font-size="12.5" fill="#1E3A8A" text-anchor="middle">Local Play on</text>
+<text x="99.0" y="327.0" font-size="12.5" fill="#1E3A8A" text-anchor="middle">real connections</text>
+<circle cx="99.0" cy="262" r="13" fill="#0F172A"/>
+<text x="99.0" y="267" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">1</text>
+<line x1="174" y1="314" x2="189" y2="314" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="190" y="262" width="150" height="104" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+<text x="265.0" y="288" font-size="15" fill="#1E3A8A" font-weight="700" text-anchor="middle">ms app pack</text>
+<text x="265.0" y="308.5" font-size="12.5" fill="#1E3A8A" text-anchor="middle">local build</text>
+<text x="265.0" y="327.0" font-size="12.5" fill="#1E3A8A" text-anchor="middle">sanity check</text>
+<circle cx="265.0" cy="262" r="13" fill="#0F172A"/>
+<text x="265.0" y="267" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">2</text>
+<line x1="340" y1="314" x2="355" y2="314" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="356" y="262" width="150" height="104" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="431.0" y="288" font-size="15" fill="#14532D" font-weight="700" text-anchor="middle">git push</text>
+<text x="431.0" y="308.5" font-size="12.5" fill="#14532D" text-anchor="middle">commit = the unit</text>
+<text x="431.0" y="327.0" font-size="12.5" fill="#14532D" text-anchor="middle">of build &amp; deploy</text>
+<circle cx="431.0" cy="262" r="13" fill="#0F172A"/>
+<text x="431.0" y="267" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">3</text>
+<line x1="506" y1="314" x2="521" y2="314" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="522" y="262" width="150" height="104" rx="12" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/>
+<text x="597.0" y="288" font-size="15" fill="#0C4A6E" font-weight="700" text-anchor="middle">ms app build</text>
+<text x="597.0" y="308.5" font-size="12.5" fill="#0C4A6E" text-anchor="middle">--commit &lt;sha&gt;</text>
+<text x="597.0" y="327.0" font-size="12.5" fill="#0C4A6E" text-anchor="middle">cloud build</text>
+<circle cx="597.0" cy="262" r="13" fill="#0F172A"/>
+<text x="597.0" y="267" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">4</text>
+<line x1="672" y1="314" x2="687" y2="314" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="688" y="262" width="150" height="104" rx="12" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/>
+<text x="763.0" y="288" font-size="15" fill="#0C4A6E" font-weight="700" text-anchor="middle">preview</text>
+<text x="763.0" y="308.5" font-size="12.5" fill="#0C4A6E" text-anchor="middle">play --mode</text>
+<text x="763.0" y="327.0" font-size="12.5" fill="#0C4A6E" text-anchor="middle">preview</text>
+<circle cx="763.0" cy="262" r="13" fill="#0F172A"/>
+<text x="763.0" y="267" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">5</text>
+<line x1="838" y1="314" x2="853" y2="314" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="854" y="262" width="150" height="104" rx="12" fill="#FFE4E6" stroke="#E11D48" stroke-width="1.5"/>
+<text x="929.0" y="288" font-size="15" fill="#881337" font-weight="700" text-anchor="middle">ms app deploy</text>
+<text x="929.0" y="308.5" font-size="12.5" fill="#881337" text-anchor="middle">--commit &lt;sha&gt;</text>
+<text x="929.0" y="327.0" font-size="12.5" fill="#881337" text-anchor="middle">confirm first!</text>
+<circle cx="929.0" cy="262" r="13" fill="#0F172A"/>
+<text x="929.0" y="267" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">6</text>
+<line x1="1004" y1="314" x2="1019" y2="314" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="1020" y="262" width="150" height="104" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="1095.0" y="288" font-size="15" fill="#4C1D95" font-weight="700" text-anchor="middle">live</text>
+<text x="1095.0" y="308.5" font-size="12.5" fill="#4C1D95" text-anchor="middle">/apps/&lt;app-id&gt;</text>
+<text x="1095.0" y="327.0" font-size="12.5" fill="#4C1D95" text-anchor="middle">what users see</text>
+<circle cx="1095.0" cy="262" r="13" fill="#0F172A"/>
+<text x="1095.0" y="267" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">7</text>
+<path d="M24,232 L24,224 L340,224 L340,232" fill="none" stroke="#94A3B8" stroke-width="2"/>
+<text x="182.0" y="216" font-size="12" fill="#64748B" font-weight="700" text-anchor="middle" letter-spacing="1.2">LOCAL</text>
+<path d="M356,232 L356,224 L506,224 L506,232" fill="none" stroke="#94A3B8" stroke-width="2"/>
+<text x="431.0" y="216" font-size="12" fill="#64748B" font-weight="700" text-anchor="middle" letter-spacing="1.2">GIT</text>
+<path d="M522,232 L522,224 L1170,224 L1170,232" fill="none" stroke="#94A3B8" stroke-width="2"/>
+<text x="846.0" y="216" font-size="12" fill="#64748B" font-weight="700" text-anchor="middle" letter-spacing="1.2">CMR CLOUD</text>
+<rect x="24" y="98" width="316" height="64" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="38" y="124" font-size="14" fill="#78350F" font-weight="700">ms app add data-source</text>
+<text x="38" y="144" font-size="12" fill="#78350F">→ generated/ + .ms/schemas (never hand-edit)</text>
+<line x1="60" y1="162" x2="60" y2="258" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M763.0,366 L763.0,412 L99.0,412 L99.0,370" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ah)"/>
+<text x="431.0" y="432" font-size="13" fill="#475569" text-anchor="middle" font-style="italic">iterate: fix → push → build again (preview tracks the commit you choose)</text>
+<path d="M1095.0,366 L1095.0,458 L929.0,458 L929.0,370" fill="none" stroke="#E11D48" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ah)"/>
+<text x="1012.0" y="478" font-size="13" fill="#9F1239" text-anchor="middle" font-style="italic">rollback = deploy a previous SHA</text>
+<text x="32" y="524" font-size="13.5" fill="#334155">Agent rules: always --non-interactive --json · read exit code 2 choices instead of guessing · never --force outside prototypes</text>
+<text x="32" y="548" font-size="13.5" fill="#334155">· confirm with a human before deploy, share, delete · report SHA + live URL after every deploy.</text>
+</svg>
