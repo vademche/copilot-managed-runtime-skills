@@ -28,6 +28,8 @@ plugins/copilot-managed-runtime/
 └── hooks/         PreToolUse guard that blocks edits to generated code
 ```
 
+![Skills across the app lifecycle](docs/images/cmr-skills-map.svg)
+
 | Skill | Use it to… |
 |---|---|
 | `cmr-overview` | Get oriented and route to the right skill |

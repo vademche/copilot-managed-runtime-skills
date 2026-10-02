@@ -1,6 +1,6 @@
 # Copilot Managed Runtime in pictures
 
-Five diagrams covering the concepts the skills rely on. The SVG sources are in [`images/`](images/).
+Five diagrams covering the concepts the skills rely on, plus a [map of the skills across the lifecycle](images/cmr-skills-map.svg). The SVG sources are in [`images/`](images/).
 
 ## 1. Architecture
 
