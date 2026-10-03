@@ -39,8 +39,11 @@ ACP vs DLP: if "Advanced connector policies only" is off, both ACP and DLP apply
 
 ## External GitHub repos
 
-- GitHub Enterprise Cloud only (`github.com` orgs on GHEC, or `*.ghe.com`). Repo must exist and be **empty** at `ms app create --repo <url>`.
-- Choice is permanent per app. Repo policies (visibility, branch protection, required reviews) are enforced in GitHub, not CMR.
+- GitHub Enterprise Cloud only (`github.com` orgs on GHEC, or `*.ghe.com` data-residency). **Not** GHES, personal-account repos, non-GHEC orgs or Azure DevOps. Repo must exist and be **completely empty** (no README/`.gitignore`/LICENSE) at `ms app create --repo <url>`.
+- Choice is permanent per app. No CMR-side org allow-list is documented. **GitHub enterprise/org policies are the control plane**: enforce private visibility, base permission none/read, GitHub App installation approval (the *Managed Apps* GitHub App), IP allow list exceptions for GitHub Apps, rulesets on `main`, push protection, and audit log streaming.
+- Preview access = **write** access to the bound repo, so GitHub teams define who can push *and* preview. CMR `--access edit` sharing doesn't grant GitHub rights.
+- Each developer holds an expiring Entra↔GitHub mapping (`ms git auth refresh`). Headless SP pipelines fit `--repo none` better.
+- Full matrix and recommended org layout: [source-control](source-control.md).
 
 ## Existing Power Platform customers
 

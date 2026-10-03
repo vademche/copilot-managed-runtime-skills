@@ -40,7 +40,7 @@ Skills, agents and hooks that teach a coding agent to build, govern and operate 
 
 ## References
 
-Shared knowledge the skills link to: [CLI cheatsheet](references/cli-cheatsheet.md) · [SDK API](references/sdk-api.md) · [Generated code](references/generated-code.md) · [Connectors & policy](references/connectors-and-policy.md) · [`ms.config.json`](references/ms-config.md) · [Governance quick ref](references/governance-quick-ref.md) · [Anti-patterns](references/anti-patterns.md) · [Troubleshooting](references/troubleshooting.md)
+Shared knowledge the skills link to: [CLI cheatsheet](references/cli-cheatsheet.md) · [SDK API](references/sdk-api.md) · [Generated code](references/generated-code.md) · [Connectors & policy](references/connectors-and-policy.md) · [`ms.config.json`](references/ms-config.md) · [Governance quick ref](references/governance-quick-ref.md) · [Source control](references/source-control.md) · [Anti-patterns](references/anti-patterns.md) · [Troubleshooting](references/troubleshooting.md)
 
 ## Works well with
 

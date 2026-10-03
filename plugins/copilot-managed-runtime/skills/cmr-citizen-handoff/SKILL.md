@@ -53,7 +53,7 @@ Copilot Studio guidance: **don't hand-edit the connection code it generated** �
 3. Replace browser-local storage with an organisational data source; migrate data.
 4. Remove sample data from production paths.
 5. Share with groups; add a second owner (`cmr-sharing`).
-6. Consider moving business-critical apps to an external GHEC repo for PR policies — this means a **new app** registration (repo type is permanent); plan re-sharing and URL change.
+6. Consider moving business-critical apps to an external GHEC repo for PR policies. This means a **new app** registration (repo type is permanent): create an empty private GHEC repo, `ms app create --repo <url>`, push the old history **after** binding, re-add data sources, re-share and plan for the URL change. See [source-control](../../references/source-control.md) §5.
 7. Commit, push, build, preview, **then** deploy.
 
 ## 6. Tell the maker

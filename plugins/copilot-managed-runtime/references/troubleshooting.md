@@ -21,7 +21,11 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | "Unable to determine the Dataverse organization URL" | env has no Dataverse | `--dataverse-environment-id <env-with-dataverse>`; delete the dangling connection (portal or Connectivity API, see `cli-cheatsheet.md` → Cleaning up connections) |
 | Ambiguous connection error (non-interactive) | >1 connection for connector | pass `-c <connection-id>` or `--use-sso` |
 | `ms app create` fails: can't create | no routing rule / CLI creation disabled for your group | admin: routing + "Allow app creation with the CMR CLI" |
-| `ms app create --repo <url>` fails | repo not empty / not GHEC / mapping expired | empty GHEC repo; `ms git auth refresh --repo <url>`; `--force-reauth` |
+| `ms app create --repo <url>` fails | repo not empty (even a README/`.gitignore`) / not a GHEC org repo / bare-host URL / mapping expired | fresh empty private GHEC repo with full `https://` URL; `ms git auth refresh --repo <url>`; `--force-reauth` |
+| `GitHubMappingMissing` / `GitHubMappingExpired` / `GitHubMappingStale` | per-user Entra↔GitHub mapping absent or expired | `ms git auth refresh --repo <url>` inside the app folder |
+| `GitHubAuthDenied` / device code `UnprocessableEntity` | Managed Apps GitHub App declined or blocked by org policy / unsupported host | approve the app (org owner may need to allow it); check host is GHEC/`*.ghe.com` |
+| `Environment id is required for ms git auth refresh` | ran outside an app folder | `cd` into the app |
+| Teammate can't see preview of a `github` app | preview needs **write** on the GitHub repo | add them to the repo's write team ([source-control](source-control.md)) |
 | `ms app clone` fails | external repo or `repoType none` | `git clone <external-url>`; none-apps have no repo |
 | `git push` prompts / fails in agent shell (platform repo) | Git Credential Manager needs interactive OAuth; in non-interactive shells its browser flow can fail ("Missing 'code' in response") | push once from a user terminal; or get a token via an Entra **device-code** flow (client ID = the repo's `credential.<url>.oauthclientid` git config, scope `https://api.powerplatform.com/.default`) and push with `git -c credential.helper= -c "http.extraHeader=Authorization: Bearer <token>" push`. Start polling in the same process (codes expire in ~15 min), keep the token in memory/temp only, delete it after |
 | `git push` rejected: unrelated histories | remote has an "Initial commit" | `git pull --allow-unrelated-histories`, resolve, push |

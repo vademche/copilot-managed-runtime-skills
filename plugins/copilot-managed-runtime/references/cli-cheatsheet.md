@@ -39,7 +39,7 @@ ms auth login                 # interactive (browser / device code)
 ms auth status                # "Signed in as <upn> (account ID: <oid>.<tenant-id>)"
 ms auth switch                # pick another cached account
 ms auth logout
-ms git auth refresh --repo <github-url>   # external GitHub (GHEC) mapping, device-code flow
+ms git auth refresh --repo <github-url>   # external GitHub (GHEC) mapping, device-code flow; run inside app folder; mapping expires (see source-control.md)
 ```
 
 ## Create / register / clone

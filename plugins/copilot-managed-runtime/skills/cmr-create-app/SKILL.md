@@ -12,10 +12,12 @@ allowed-tools: Read, Edit, Write, Bash, Glob, Grep, AskUserQuestion
 | Model | Command | Choose when | Trade-offs |
 |---|---|---|---|
 | **Platform-managed Git** (`repoType: native`) | `ms app create -n "<name>" ./dir` | citizen/pro-dev collaboration, fastest start, `ms app clone` handoff | pushes are **not** in Purview audit; limited branch protection; GCM OAuth |
-| **External GitHub Enterprise Cloud** (`github`) | `ms app create -n "<name>" --repo https://github.com/<org>/<repo> ./dir` | enterprise SDLC: PR reviews, branch protection, CodeQL, Dependabot, audit log | repo must exist **empty** on GHEC; no `ms app clone` (use `git clone`) |
-| **None / external artifacts** (`none`) | `ms app create -n "<name>" --repo none ./dir` | you own the build (GitHub Actions, ADO) and deploy zips | admin must enable external artifacts; you own provenance & scanning (AP-56) |
+| **External GitHub Enterprise Cloud** (`github`) | `ms app create -n "<name>" --repo https://github.com/<org>/<repo> ./dir` (or `https://<sub>.ghe.com/...`) | enterprise SDLC: PR reviews, rulesets, CodeQL, Dependabot, audit log | GHEC org repo only (no personal/GHES/ADO); must exist **completely empty**, not even README/`.gitignore` (AP-17/18); preview = repo **write** access; per-user GitHub mapping expires; no `ms app clone` (use `git clone`) |
+| **None / external artifacts** (`none`) | `ms app create -n "<name>" --repo none ./dir` | you own the build (GitHub Actions, ADO) and deploy zips; fully headless SP CI | admin must enable external artifacts; you own provenance & scanning (AP-56) |
 
-Ask the user if unclear. Default recommendation: **platform Git for prototypes and citizen handoff; external GHEC for anything business-critical.**
+Ask the user if unclear. Default recommendation: **platform Git for prototypes and citizen handoff; external GHEC (private repo, team write access, ruleset on `main`) for anything business-critical; `none` when CI must run headless with a service principal.** Full comparison, GitHub settings that matter and error map: [source-control](../../references/source-control.md).
+
+GitHub mode pre-flight: `gh repo create <org>/<repo> --private` (no `--add-readme`/`--gitignore`/`--license`) → create the app → if prompted, complete the device code at `https://<host>/login/device` → then add README, CODEOWNERS, workflows and the ruleset.
 
 ## 2. Pick the environment
 
@@ -63,4 +65,4 @@ Existing SPA instead: `cd my-spa && ms app init -n "My SPA" --repo native|none|<
 
 ## Anti-patterns
 
-AP-01, AP-10, AP-13, AP-16, AP-40. See [anti-patterns](../../references/anti-patterns.md).
+AP-01, AP-10, AP-13, AP-16, AP-17, AP-18, AP-19, AP-40. See [anti-patterns](../../references/anti-patterns.md).

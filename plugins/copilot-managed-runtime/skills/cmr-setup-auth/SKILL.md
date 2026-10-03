@@ -25,7 +25,7 @@ ms auth status                                  # expect: Signed in as <upn> (ac
 
 Multiple tenants/accounts: `ms auth switch`, then re-check `ms auth status` **before any write command**.
 
-External GitHub (GHEC) repos: `ms git auth refresh --repo https://github.com/<org>/<repo>` (device-code flow). Use `--force-reauth` on create/build/deploy if the mapping is corrupt.
+External GitHub (GHEC) repos: `ms git auth refresh --repo https://github.com/<org>/<repo>` (device-code flow against the repo's host via the *Managed Apps* GitHub App). Run it **inside the app folder** (it needs `environmentId`). It stores an Entra↔GitHub login mapping server-side that **expires** (`mappingExpiresAt`), and no GitHub token is kept locally. Re-run on `GitHubMappingMissing|Expired|Stale`, and use `--force-reauth` on create/build/deploy if the mapping is corrupt. EMU users authorise with their managed account. If the org blocks the app (`GitHubAuthDenied`) an org owner must approve it. Details: [source-control](../../references/source-control.md).
 
 ## Steps (CI / service principal)
 
@@ -34,7 +34,8 @@ External GitHub (GHEC) repos: `ms git auth refresh --repo https://github.com/<or
    - Environment **with** Dataverse → add an *application user* with **System Administrator** (+ System Customizer).
    - Environment **without** Dataverse → assign **EnvironmentAdmin** via the BAP role-assignment API using the SP **object ID** (Enterprise applications blade), not the client ID.
 3. Share the app with the SP if it must operate on it: `ms app share <sp-object-id> --access edit` (or `--access test` for test automation).
-4. In the job, export `MS_CLI_SP_CLIENT_ID`, `MS_CLI_SP_CLIENT_SECRET`, `MS_CLI_SP_TENANT_ID` (the official actions do this from `app-id`/`client-secret`/`tenant-id` inputs). With `CI=true` SP auth activates automatically; `MS_CLI_USE_SP_AUTH=true` forces it.
+4. GitHub-bound (`repoType: github`) apps rely on a **per-user** GitHub mapping that a service principal can't create headlessly. For fully headless CI prefer `repoType: none` + external artifacts, and validate SP deploys of `github` apps in your tenant first.
+5. In the job, export `MS_CLI_SP_CLIENT_ID`, `MS_CLI_SP_CLIENT_SECRET`, `MS_CLI_SP_TENANT_ID` (the official actions do this from `app-id`/`client-secret`/`tenant-id` inputs). With `CI=true` SP auth activates automatically; `MS_CLI_USE_SP_AUTH=true` forces it.
 
 ## Agent rules
 

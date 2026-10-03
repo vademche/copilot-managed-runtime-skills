@@ -86,7 +86,8 @@ For Model A in CI, replace pack/deploy with `ms app deploy --commit ${{ github.s
 - Trunk-based: short-lived feature branches → PR → `main`. Preview (`/branch/main`) = integration; **live = explicit deploy**.
 - Tag releases (`vX.Y.Z`); deploy tags, not arbitrary SHAs; rollback = redeploy previous tag.
 - PR checks: lint, typecheck, unit tests, `ms app pack` (validates allowed actions), `cmr-review` checklist.
-- Platform-managed Git has limited branch protection and its pushes are not in Purview audit → use external GHEC for apps that require enforced review.
+- Platform-managed Git has no branch protection or PRs and its pushes are not in Purview audit → use external GHEC for apps that require enforced review (AP-57).
+- On `github` apps, protect `main` with a ruleset (PR, reviews, CODEOWNERS for `ms.config.json`, required checks, no force-push). The platform builds `main` and a push alone doesn't build. Deploy reviewed SHAs with `--commit` (AP-58). See [source-control](../../references/source-control.md).
 
 ## 5. Provenance for `--repo none`
 
@@ -94,4 +95,4 @@ You own it: build from a clean checkout, `npm ci` with lockfile, SBOM (`.ms/pack
 
 ## Anti-patterns
 
-AP-50 … AP-56, AP-12, AP-13. See [anti-patterns](../../references/anti-patterns.md) · [cli-cheatsheet](../../references/cli-cheatsheet.md).
+AP-50 … AP-58, AP-12, AP-13. See [anti-patterns](../../references/anti-patterns.md) · [cli-cheatsheet](../../references/cli-cheatsheet.md) · [source-control](../../references/source-control.md).

@@ -19,7 +19,10 @@ Each entry: **what it looks like → why it hurts → do this instead.** IDs (`A
 | AP-13 | Unpinned / global-only CLI versions across a team | Different codegen output per developer | Pin `@microsoft/managed-apps-cli` in `devDependencies`; use `npx ms` |
 | AP-14 | Importing from the package root `@microsoft/managed-apps` | No root export → build error | Sub-paths: `/app`, `/auth`, `/data`, `/telemetry` |
 | AP-15 | `import { XService } from '../generated'` for **Dataverse** services | Default exports aren't re-exported → `undefined` at runtime | `import XService from '../generated/services/XService'` |
-| AP-16 | Choosing `--repo` casually | Fixed at creation; changing = new app | Decide platform Git vs GHEC vs none up front (`cmr-create-app`) |
+| AP-16 | Choosing `--repo` casually | Fixed at creation; changing = new app | Decide platform Git vs GHEC vs none up front (`cmr-create-app`, [source-control](source-control.md)) |
+| AP-17 | Creating the GitHub repo with README / `.gitignore` / LICENSE before `ms app create --repo` | Create requires a **completely empty** repo → "Repository … is not empty" | Create the repo with no files; add README after binding, or `ms app init --repo <url>` in an existing clone |
+| AP-18 | Binding a personal-account, non-GHEC org, GHES or Azure DevOps repo, or a bare-host URL | Unsupported; fails at bind or auth | GHEC org repo (github.com or `*.ghe.com`) with a full `https://` URL |
+| AP-19 | Public or `internal` visibility for app source repos | Exposes source and data-source wiring to everyone/the whole enterprise; `internal` read doesn't even grant preview | Private repos enforced by enterprise policy; team-based **write** = the preview/push list |
 
 ## Data & connectors
 
@@ -60,6 +63,8 @@ Each entry: **what it looks like → why it hurts → do this instead.** IDs (`A
 | AP-54 | GitHub Actions `ms-app-deploy` without explicit `cloud` | Action source defaults `cloud` to `test` | Set `cloud: prod` (or your sovereign cloud) explicitly; verify after first run |
 | AP-55 | Floating action refs (`@main`) | Supply-chain risk | Pin to an immutable tag/SHA |
 | AP-56 | Shipping `--repo none` + external artifacts without pipeline controls | You own provenance; CMR doesn't scan | Protected branches, required reviews, SCA/secret scanning, signed artifacts |
+| AP-57 | Keeping regulated / business-critical apps on platform-managed Git | No PRs, branch protection or code scanning; pushes not in Purview audit; any editor can push to `main` | GHEC repo with rulesets + audit log streaming, or `none` + controlled pipeline |
+| AP-58 | Leaving `main` unprotected on a `github` app (or assuming push = build) | Platform builds whatever is on `main`; push doesn't build, deploy takes the latest successful `main` build | Ruleset on `main` (PR, reviews, checks, no force-push); `ms app deploy --commit <reviewed-sha>` |
 
 ## Sharing, citizen handoff, cost
 

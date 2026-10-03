@@ -7,7 +7,7 @@ allowed-tools: Read, Grep, Glob, AskUserQuestion
 
 # Governance and administration
 
-Reference: [governance-quick-ref](../../references/governance-quick-ref.md) · [connectors-and-policy](../../references/connectors-and-policy.md).
+Reference: [governance-quick-ref](../../references/governance-quick-ref.md) · [connectors-and-policy](../../references/connectors-and-policy.md) · [source-control](../../references/source-control.md) (GitHub enterprise policies for `github` apps).
 
 ## 1. The control plane
 
