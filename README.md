@@ -1,6 +1,6 @@
 # Copilot Managed Runtime skills
 
-Skills, agents and a guard hook that help AI coding agents (GitHub Copilot CLI, Copilot in VS Code, Claude Code and others) build **governed, distributable apps on Microsoft Copilot Managed Runtime (CMR)**. They cover the work from a first `ms app create` through governance, ALM and production review.
+Skills, agents and a guard hook that help AI coding agents (GitHub Copilot CLI, Copilot in VS Code, Claude Code, OpenAI Codex and others) build **governed, distributable apps on Microsoft Copilot Managed Runtime (CMR)**. They cover the work from a first `ms app create` through governance, ALM and production review.
 
 ![Copilot Managed Runtime architecture](docs/images/cmr-architecture.svg)
 
@@ -14,7 +14,7 @@ CMR runs single-page apps (React/Vite/TypeScript or any framework) on a Microsof
 - **Stay inside policy.** That means connector and MCP allow-lists, sharing limits, CSP, and the environment-group routing set by admins.
 - **Keep generated code generated.** Wrap `generated/services/*` behind `src/data/*`; never hand-edit them.
 - **Hand over cleanly.** A citizen maker starts an app in Copilot Studio or Cowork; a pro developer takes over the source and can give it back.
-- **Avoid the 64 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
+- **Avoid the 65 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
 
 These skills package that knowledge so a coding agent can follow it step by step.
 
@@ -62,6 +62,23 @@ Full details: [plugin README](plugins/copilot-managed-runtime/README.md). Visual
 ```
 
 Or load the plugin straight from a clone: `copilot --plugin-dir ./plugins/copilot-managed-runtime`.
+
+### OpenAI Codex (CLI and app)
+
+The repo is also a Codex plugin marketplace (`.agents/plugins/marketplace.json`, `.codex-plugin/plugin.json`):
+
+```text
+codex plugin marketplace add vademche/copilot-managed-runtime-skills
+```
+
+Then open `/plugins` in Codex, install **Copilot Managed Runtime**, and approve the guard hook in `/hooks`. Call a skill with `$cmr-create-app`, `$cmr-review` and so on. Codex plugins don't carry custom agents, and the Codex IDE extension doesn't load plugins yet. For either case, use the skills-only install:
+
+```bash
+node copilot-managed-runtime-skills/scripts/install.mjs .agents --codex     # per repo: .agents/skills + .codex/agents/*.toml
+node copilot-managed-runtime-skills/scripts/install.mjs ~/.agents --codex   # per user
+```
+
+`--codex` converts `cmr-architect` and `cmr-reviewer` into read-only Codex custom agents. Codex reads this repo's `AGENTS.md` natively.
 
 ### VS Code (GitHub Copilot), Cursor and other agents (skills only)
 

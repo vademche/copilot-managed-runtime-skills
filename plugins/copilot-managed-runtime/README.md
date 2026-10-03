@@ -37,11 +37,19 @@ Skills, agents and hooks that teach a coding agent to build, govern and operate 
 
 | Hook | Behaviour |
 |---|---|
-| `PreToolUse` → [`guard-generated.mjs`](hooks/guard-generated.mjs) | Denies agent edits to `generated/` and `.ms/schemas/` inside a project that has `ms.config.json` (they are overwritten by `ms app add/refresh data-source`). Bypass with `CMR_ALLOW_GENERATED_EDITS=1`. Fails open; requires Node.js (already a CMR prerequisite). No telemetry. |
+| `PreToolUse` → [`guard-generated.mjs`](hooks/guard-generated.mjs) | Denies agent edits to `generated/` and `.ms/schemas/` inside a project that has `ms.config.json` (they are overwritten by `ms app add/refresh data-source`). Understands GitHub Copilot, Claude Code and OpenAI Codex (`apply_patch`) payloads; in Codex, trust it once in `/hooks`. Bypass with `CMR_ALLOW_GENERATED_EDITS=1`. Fails open; requires Node.js (already a CMR prerequisite). No telemetry. |
+
+## Agent platforms
+
+| Platform | Install | Skills | Agents | Hook |
+|---|---|---|---|---|
+| GitHub Copilot CLI, Claude Code | `/plugin marketplace add vademche/copilot-managed-runtime-skills` | yes | yes | yes |
+| OpenAI Codex CLI / app | `codex plugin marketplace add vademche/copilot-managed-runtime-skills`, then `/plugins` | yes (`$cmr-…`) | via `install.mjs --codex` (TOML in `.codex/agents/`) | yes, after `/hooks` trust |
+| VS Code Copilot, Cursor, Codex IDE extension | `node scripts/install.mjs <dir> [--agents\|--codex]` | yes | optional | no |
 
 ## References
 
-Shared knowledge the skills link to: [CLI cheatsheet](references/cli-cheatsheet.md) · [SDK API](references/sdk-api.md) · [Generated code](references/generated-code.md) · [Connectors & policy](references/connectors-and-policy.md) · [`ms.config.json`](references/ms-config.md) · [Governance quick ref](references/governance-quick-ref.md) · [Source control](references/source-control.md) · [Backend provisioning](references/backend-provisioning.md) · [Solutions & ALM](references/solutions-and-alm.md) · [Anti-patterns](references/anti-patterns.md) · [Troubleshooting](references/troubleshooting.md)
+Shared knowledge the skills link to: [CLI cheatsheet](references/cli-cheatsheet.md) · [SDK API](references/sdk-api.md) · [Generated code](references/generated-code.md) · [Connectors & policy](references/connectors-and-policy.md) · [`ms.config.json`](references/ms-config.md) · [Governance quick ref](references/governance-quick-ref.md) · [Source control](references/source-control.md) · [Backend provisioning](references/backend-provisioning.md) · [Solutions & ALM](references/solutions-and-alm.md) · [Inventory, orphans & adoption](references/inventory-orphans-adoption.md) · [Anti-patterns](references/anti-patterns.md) · [Troubleshooting](references/troubleshooting.md)
 
 ## Works well with
 

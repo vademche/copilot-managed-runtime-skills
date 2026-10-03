@@ -1,0 +1,29 @@
+{
+  "name": "copilot-managed-runtime",
+  "version": "0.1.0",
+  "description": "Skills and a guard-rail hook for building, governing and operating apps on Microsoft Copilot Managed Runtime (ms CLI + @microsoft/managed-apps SDK): create, data sources, Dataverse, MCP/Work IQ, CSP, ALM/CI-CD, sharing, citizen-to-pro-dev handoff, orphaned apps, adoption, licensing and admin governance.",
+  "author": {
+    "name": "vademche",
+    "url": "https://github.com/vademche"
+  },
+  "homepage": "https://github.com/vademche/copilot-managed-runtime-skills",
+  "repository": "https://github.com/vademche/copilot-managed-runtime-skills",
+  "license": "MIT",
+  "keywords": ["copilot-managed-runtime", "managed-apps", "ms-cli", "power-platform", "dataverse", "mcp", "governance", "alm", "codex", "skills"],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "Copilot Managed Runtime",
+    "shortDescription": "Build and govern Microsoft Copilot Managed Runtime apps",
+    "longDescription": "End-to-end skills for Microsoft Copilot Managed Runtime: scaffold apps with the ms CLI, connect SharePoint, Dataverse, connectors and MCP servers, harden CSP, set up ALM and CI/CD, hand citizen apps over to pro developers, find orphaned apps and measure adoption. Includes a hook that blocks edits to regenerated codegen output.",
+    "developerName": "vademche",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "websiteURL": "https://github.com/vademche/copilot-managed-runtime-skills",
+    "defaultPrompt": [
+      "Use $cmr-create-app to scaffold a Copilot Managed Runtime app",
+      "Use $cmr-review to check this CMR app against the anti-pattern catalog",
+      "Use $cmr-governance-admin to find orphaned CMR apps in my tenant"
+    ]
+  }
+}

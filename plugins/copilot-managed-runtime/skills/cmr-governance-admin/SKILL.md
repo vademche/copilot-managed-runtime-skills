@@ -1,6 +1,6 @@
 ---
 name: cmr-governance-admin
-description: Tenant administration and governance for Copilot Managed Runtime — environment groups and routing, connector/MCP and action policies (ACP vs DLP), sharing rules, CSP, CLI creation and external-artifact switches, tenant-wide app inventory, orphaned apps (owner left), adoption/usage, monitoring, alerts, Purview audit, and a governance operating model for citizen and pro-dev makers. USE WHEN an admin or CoE asks how to govern, restrict, monitor, audit or roll out CMR, how to find all apps citizens built, which apps are orphaned or still used, or when a maker is blocked by policy and needs to know what to ask for. DO NOT USE WHEN administering Power Apps canvas/model-driven environments unrelated to CMR.
+description: Tenant governance for Copilot Managed Runtime — environment groups, connector/MCP policies (ACP vs DLP), sharing, CSP, CLI and external-artifact switches, tenant-wide inventory, orphaned apps, adoption (DAU/MAU), monitoring and Purview audit. USE WHEN an admin or CoE asks how to govern, monitor, audit or roll out CMR, find all citizen apps, spot orphaned or unused apps, or unblock a maker hit by policy. DO NOT USE WHEN administering canvas/model-driven environments unrelated to CMR.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---
@@ -61,7 +61,7 @@ Also govern the **Dataverse MCP** schema tools (`create_table` / `update_table` 
 Full detail: [inventory-orphans-adoption](../../references/inventory-orphans-adoption.md).
 
 1. **List every app.** Use the inventory API, PPAC Inventory or MAC → Apps → All apps. Not `ms app list`: it only shows apps shared with you (AP-74). Not the Power Apps admin cmdlets or the CoE kit: they don't see CMR apps (AP-77). CMR apps are `microsoft.powerapps/apps` with `subType microsoftApp`; `origin` tells you how each one was created.
-2. **Adoption.** Join the inventory's `microsoft.powerplatformusage/usagerecords` (`lastUsed`, daily) on app ID. No record = never launched. MAC Usage / Monitor tabs and Purview `LaunchPowerApp` give users and sessions.
+2. **Adoption.** Join the inventory's `microsoft.powerplatformusage/usagerecords` (`lastUsed`, daily) on app ID. No record = never launched. For DAU / MAU and sessions use the MAC **Usage** tab or the usage API behind it (`timeGrain=day|month|all`; script switch `-IncludeActiveUsers`). The classic PPAC analytics and the CoE kit don't cover CMR apps (AP-80). See reference §3b.
 3. **Orphans.** Resolve `ownerId` / `createdBy` with Graph `directoryObjects/getByIds`: missing = deleted user, `accountEnabled: false` = disabled.
 4. **Classify** with the 2×2 below and act on 🔴 first.
 
@@ -84,4 +84,4 @@ Run it with [`scripts/Find-CmrOrphanedApps.ps1`](scripts/Find-CmrOrphanedApps.ps
 
 ## Anti-patterns
 
-AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65, AP-74 … AP-79. See [anti-patterns](../../references/anti-patterns.md).
+AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65, AP-74 … AP-80. See [anti-patterns](../../references/anti-patterns.md).

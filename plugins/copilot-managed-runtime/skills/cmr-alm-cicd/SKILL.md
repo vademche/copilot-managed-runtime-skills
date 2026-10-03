@@ -1,6 +1,6 @@
 ---
 name: cmr-alm-cicd
-description: Application lifecycle for Copilot Managed Runtime apps — branching and release strategy, dev/test/prod separation, GitHub Actions with service principals (install-ms-cli, ms-app-pack, ms-app-deploy), external artifact deployment (`--repo none`), and the preview deployment-overlay ALM (`MS_CLI_ALM`). USE WHEN setting up CI/CD, promoting between environments, deploying from GitHub Actions or Azure DevOps, or designing release governance. DO NOT USE WHEN running ad-hoc local deploys (use cmr-inner-loop) or Power Platform solution pipelines for canvas/model-driven apps.
+description: Application lifecycle for Copilot Managed Runtime apps — branching, dev/test/prod, GitHub Actions with service principals, external artifact deployment (`--repo none`) and the preview `MS_CLI_ALM` overlay. USE WHEN setting up CI/CD, promoting between environments, deploying from GitHub Actions or Azure DevOps, or designing release governance. DO NOT USE WHEN doing ad-hoc local deploys (cmr-inner-loop).
 user-invocable: true
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 ---

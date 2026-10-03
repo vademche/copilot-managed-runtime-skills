@@ -27,3 +27,11 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 ```
 
 Then add it to the catalog tables in the root and plugin READMEs and to `cmr-overview`'s routing table.
+
+Keep skills portable across GitHub Copilot, Claude Code and OpenAI Codex:
+
+- Use only `name` and `description` for behaviour. Other frontmatter keys are ignored by some agents.
+- Keep `description` under about 450 characters. Codex caps its combined skill list at about 8,000 characters, and `validate.mjs` fails above that.
+- Link shared knowledge as `../../references/…` (the installer keeps that layout).
+- If you change an agent in `agents/*.md`, check its Codex conversion with `node scripts/install.mjs <tmp-dir> --codex`.
+- If you change the hook, test a Copilot payload (`toolArgs`), a Claude payload (`tool_input.file_path`) and a Codex `apply_patch` payload (`tool_input.command`).

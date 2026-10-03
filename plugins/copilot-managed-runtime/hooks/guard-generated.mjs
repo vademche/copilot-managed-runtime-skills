@@ -26,8 +26,9 @@ function collectPaths(input) {
     if (!o || typeof o !== 'object') return;
     for (const k of ['file_path', 'path', 'filePath', 'notebook_path']) if (typeof o[k] === 'string') out.push(o[k]);
     if (Array.isArray(o.edits)) o.edits.forEach(take);
-    if (typeof o.patch === 'string' || typeof o.input === 'string') {
-      const text = o.patch ?? o.input;
+    // Codex sends apply_patch text in tool_input.command; others use patch/input.
+    for (const text of [o.patch, o.input, o.command]) {
+      if (typeof text !== 'string') continue;
       for (const m of text.matchAll(/^\*\*\* (?:Update|Add|Delete) File: (.+)$/gm)) out.push(m[1].trim());
     }
   };
@@ -68,11 +69,14 @@ try {
   for (const p of collectPaths(input)) {
     const reason = protectedReason(p, cwd);
     if (reason) {
-      process.stdout.write(JSON.stringify({
-        permissionDecision: 'deny',
-        permissionDecisionReason: reason,
-        hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'deny', permissionDecisionReason: reason },
-      }) + '\n');
+      const hookSpecificOutput = { hookEventName: 'PreToolUse', permissionDecision: 'deny', permissionDecisionReason: reason };
+      // Codex rejects unknown top-level fields (the hook would fail open), so send it only the
+      // hook-specific shape. Codex sets PLUGIN_ROOT and adds turn_id to the input.
+      const isCodex = Boolean(process.env.PLUGIN_ROOT) || typeof input.turn_id === 'string';
+      const out = isCodex
+        ? { hookSpecificOutput }
+        : { permissionDecision: 'deny', permissionDecisionReason: reason, hookSpecificOutput };
+      process.stdout.write(JSON.stringify(out) + '\n');
       process.exit(0);
     }
   }

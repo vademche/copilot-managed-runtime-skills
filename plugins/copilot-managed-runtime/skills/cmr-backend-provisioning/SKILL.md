@@ -1,6 +1,6 @@
 ---
 name: cmr-backend-provisioning
-description: Provision and ship the backend a Copilot Managed Runtime app binds to — Dataverse tables in a solution (publisher, unmanaged in dev, managed downstream), SharePoint group sites/lists/libraries and Planner plans via idempotent Graph scripts, repo layout (/app + /dataverse + /provisioning), schema-first release order, and how Dataverse solutions relate to the app's Git repo. USE WHEN an app needs new tables/lists/libraries/plans, when asked "managed or unmanaged solution?", "do I need a solution and a repo?", how to promote Dataverse schema with a CMR app, how to script backend setup for citizen-to-pro-dev handoff, or whether Work IQ / Dataverse MCP / Copilot Studio / Cowork can create tables and lists (and what to do with the ones they created). DO NOT USE WHEN binding existing data sources only (use cmr-data-sources / cmr-dataverse), or for canvas/model-driven/code-apps solution ALM.
+description: Provision and ship the backend a Copilot Managed Runtime app binds to — Dataverse tables in solutions (managed vs unmanaged), SharePoint sites/lists and Planner plans via idempotent scripts, repo layout and schema-first release order. USE WHEN an app needs new tables/lists/plans, asking "managed or unmanaged?" or "solution and repo?", or handling tables an AI (Dataverse MCP, Work IQ, Copilot Studio, Cowork) created. DO NOT USE WHEN only binding existing data (cmr-data-sources).
 user-invocable: true
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 ---

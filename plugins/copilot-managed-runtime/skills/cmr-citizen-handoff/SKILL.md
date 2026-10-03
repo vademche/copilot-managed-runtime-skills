@@ -1,6 +1,6 @@
 ---
 name: cmr-citizen-handoff
-description: Find and take over an app created by a citizen maker in Copilot Studio (apps experience) or Copilot Cowork and continue it as pro-code in a Copilot Managed Runtime repo — locate the app (play link, inventory), access, clone, assess (including tables/lists an AI created for the maker), harden, and hand back without breaking the app's identity, sharing or regeneration. USE WHEN a maker asks a developer to "take over", "extend", "productionize" or "fix" an app built with Copilot Studio or Cowork, when a developer needs to find which app a citizen built, or when planning a citizen-to-pro-dev fusion process. DO NOT USE WHEN creating a brand new app (use cmr-create-app), or for tenant-wide orphan/adoption reviews (use cmr-governance-admin).
+description: Find and take over a Copilot Managed Runtime app a citizen built in Copilot Studio, Cowork or Copilot Code — locate, access, clone, assess, harden as pro-code, and hand back without breaking identity, sharing or regeneration. USE WHEN asked to take over, extend, productionize or fix a citizen-built app, find which app a maker built, or plan a citizen-to-pro-dev process. DO NOT USE WHEN creating a new app (cmr-create-app) or reviewing orphans tenant-wide (cmr-governance-admin).
 user-invocable: true
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 ---

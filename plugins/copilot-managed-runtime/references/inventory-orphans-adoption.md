@@ -12,7 +12,7 @@ Everything here was checked in a lab tenant with `ms` 0.27.0 (preview). Placehol
 |---|---|---|---|
 | `ms app list --json` | **only apps you can play or edit**, all environments (`-e` to filter) | yes, RBAC-scoped | Fine for a maker. **Not an inventory**: an admin doesn't see apps nobody shared with them (AP-74) |
 | `ms app info --app <app-id> --json` | one app, any environment you have access to | yes | No `-e` needed: the CLI resolves the environment from the app ID |
-| Microsoft 365 admin center → Copilot → Apps → **All apps** | tenant | yes | Owner, environment, Block / Delete, **Monitor** and **Usage** tabs, export. ≈15 min latency |
+| Microsoft 365 admin center → Apps → **All apps** → Managed apps | tenant | yes | Owner, status, location, environment group, export, choose columns (no usage columns). App details: **Details / Usage / Monitor / Connectors** tabs, Block / Delete. ≈15 min latency |
 | Power Platform admin center → Manage → **Inventory** | tenant | yes (type *App*) | Same data source as the API below |
 | **Power Platform inventory API** (resource query) | tenant | yes | Scriptable. Delegated admin token only (§2) |
 | Power Apps admin API / `Get-AdminPowerApp` / `Set-AdminPowerAppOwner` | canvas apps, code apps | **no**: CMR apps return `404 ApplicationNotFound` | Don't use for CMR. There's no ownership reassignment path (§6) |
@@ -73,9 +73,42 @@ The inventory holds a daily "last used" marker per resource: `type == 'microsoft
 }
 ```
 
-Keep the rows whose `id` contains `/providers/Microsoft.PowerApps/apps/`, then join on `properties.resourceId == name`. For depth beyond "last used":
-- **MAC → All apps → app → Usage**: active users and sessions over time. **Monitor**: open success rate, time-to-interactive P75, sessions. 28 days of data. Export the grid for a quarterly review.
+Keep the rows whose `id` contains `/providers/Microsoft.PowerApps/apps/`, then join on `properties.resourceId == name`. Usage records answer "used recently?". For "how many people?" see §3b.
 - **Purview audit** (§5) for who launched it and how often.
+
+## 3b. Active users: DAU, MAU and sessions
+
+Lab-checked October 2026. CMR apps are **not** in the classic Power Platform analytics (they cover canvas and model-driven apps), so use these:
+
+| Source | Covers CMR apps? | What you get | Access |
+|---|---|---|---|
+| MAC → Apps → All apps → app → **Usage** | yes | active users and sessions over time. Empty ("No data to display yet") until the app is published and launched | Global / Power Platform admin; AI admin and readers can view |
+| **Usage API** behind that tab (below) | yes | `ActiveUsers`, `ActiveSessions` per `day`, `month`, `quarter` or `all`, per app or tenant-wide | delegated `https://api.powerplatform.com` token (the `az` CLI token works), Power Platform admin |
+| MAC → app → **Monitor** | yes | App session count, app open success rate, time to interactive P75, data request success rate and latency P75; alert rules; last 30 days | same roles. Its API needs the delegated scope `Monitor.Timeseries.Read`; the `az` CLI token lacks it (`403 InsufficientDelegatedPermissions`). Use the UI or your own app registration |
+| MAC → Copilot → **Cost management → Consumption** | yes (Copilot Managed Runtime is a named billed service) | users who generated billable usage, by user, agent or app | Billing / AI admin. Misses users covered by Power Apps Premium |
+| **Application Insights** via the SDK logger (`cmr-sdk-patterns`) | yes, if you instrument it | true unique users by Entra object ID, custom events, funnels, retention | the app team; an admin must allow the ingestion host in CSP `connect-src` |
+| Purview audit `LaunchPowerApp` (§5) | not verified for CMR | per-user launches | audit reader |
+| PPAC Usage page, Power Apps usage reports, self-service analytics export, CoE Starter Kit | not documented for CMR | canvas / model-driven only | — |
+| M365 usage reports, Copilot Dashboard | no | Copilot Chat usage, not apps | — |
+
+Usage API (undocumented preview endpoint that the admin center calls; wrap it and expect change):
+
+```powershell
+$tok = az account get-access-token --resource https://api.powerplatform.com --query accessToken -o tsv
+$t = (az account show --query tenantId -o tsv).Replace('-', '')
+# Tenant host: tenant ID without dashes, with a dot before the last two characters.
+$usageHost = "$($t.Substring(0, $t.Length - 2)).$($t.Substring($t.Length - 2)).tenant.api.powerplatform.com"
+$from = (Get-Date).AddDays(-90).ToString('yyyy-MM-ddT00:00:00Z'); $to = (Get-Date).ToString('yyyy-MM-ddT23:59:59Z')
+$uri = "https://$usageHost/usage/PowerAppsTimeSeries?api-version=1&`$filter=Date ge $from and Date le $to and ResourceId eq '<app-id>'&timeGrain=month"
+(Invoke-RestMethod $uri -Headers @{ Authorization = "Bearer $tok" }).value   # Date, ActiveUsers, ActiveSessions, TenantId
+```
+
+- `timeGrain=day` gives DAU; `month` gives MAU (distinct users per calendar month; never sum daily users); `all` gives distinct users across the whole window. `week` and `hour` are rejected.
+- Leave out `ResourceId` for tenant totals across Power Apps resources (not CMR-only).
+- In the lab the same call returned users and sessions for a code app and was the call the Usage tab made for a CMR app.
+- [`Find-CmrOrphanedApps.ps1`](../skills/cmr-governance-admin/scripts/Find-CmrOrphanedApps.ps1) `-IncludeActiveUsers` adds `ActiveUsers` and `Sessions` for the active window.
+
+Useful ratios: **stickiness** = DAU ÷ MAU; **reach** = MAU ÷ the size of the security group the app is shared with. An orphaned app with high reach is the first one to fix.
 
 ## 4. Orphan check: owners against Entra ID
 
@@ -142,4 +175,4 @@ There is **no ownership reassignment for CMR apps** in preview: the Power Apps a
 - [ ] Ungrouped environments that host CMR apps: none (AP-36).
 - [ ] Monitor failures and cost outliers reviewed.
 
-Anti-patterns: AP-65, AP-74 … AP-77. See [anti-patterns](anti-patterns.md).
+Anti-patterns: AP-65, AP-74 … AP-77, AP-80. See [anti-patterns](anti-patterns.md).

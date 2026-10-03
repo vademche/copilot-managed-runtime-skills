@@ -56,9 +56,24 @@ if (versions.size > 1) errors.push(`manifest versions differ: ${[...versions].jo
 const [pj1, pj2] = manifests.slice(2).map(m => JSON.stringify(parsed[m]));
 if (pj1 !== pj2) errors.push('plugin.json files under .claude-plugin/ and .plugin/ must be identical');
 
+// 1b. OpenAI Codex manifests (different schema: object source, no versions in the marketplace)
+for (const m of ['.agents/plugins/marketplace.json', 'plugins/copilot-managed-runtime/.codex-plugin/plugin.json']) {
+  const f = path.join(root, m);
+  if (!fs.existsSync(f)) { err(f, 'missing Codex manifest'); continue; }
+  let j; try { j = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { err(f, `invalid JSON: ${e.message}`); continue; }
+  if (j.plugins) {
+    for (const p of j.plugins) if (!fs.existsSync(path.join(root, p.source?.path ?? ''))) err(f, `plugin source not found: ${p.source?.path}`);
+  } else {
+    if (j.version !== parsed[manifests[2]]?.version) err(f, `version ${j.version} differs from .claude-plugin/plugin.json`);
+    if (j.name !== parsed[manifests[2]]?.name) err(f, `name ${j.name} differs from .claude-plugin/plugin.json`);
+    for (const k of ['skills', 'hooks']) if (j[k] && !fs.existsSync(path.join(path.dirname(path.dirname(f)), j[k]))) err(f, `${k} path not found: ${j[k]}`);
+  }
+}
+
 // 2. Skills
 const skillsDir = path.join(plugin, 'skills');
 const skills = fs.readdirSync(skillsDir, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name);
+let descTotal = 0;
 for (const s of skills) {
   const f = path.join(skillsDir, s, 'SKILL.md');
   if (!fs.existsSync(f)) { err(path.join(skillsDir, s), 'missing SKILL.md'); continue; }
@@ -71,7 +86,10 @@ for (const s of skills) {
   if (d.length > 1024) err(f, `description is ${d.length} chars (max 1024)`);
   if (!d.includes('USE WHEN')) err(f, 'description must contain "USE WHEN"');
   if (!d.includes('DO NOT USE WHEN')) err(f, 'description must contain "DO NOT USE WHEN"');
+  descTotal += d.length;
 }
+// OpenAI Codex lists all skill descriptions within ~8,000 characters and truncates beyond that.
+if (descTotal > 8000) errors.push(`skill descriptions total ${descTotal} chars; keep under 8000 for Codex`);
 
 // 3. Agents
 const agentsDir = path.join(plugin, 'agents');

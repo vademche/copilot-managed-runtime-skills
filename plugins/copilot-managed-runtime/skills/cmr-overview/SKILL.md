@@ -38,6 +38,20 @@ If signals are mixed, stop and ask the user which product they target (AP-01).
 - **Apps live in the maker's personal developer environment**, governed by a tenant **environment group** (routing, connectors+MCP, sharing, CSP).
 - **No backend of your own** by default: all data goes through connectors; the browser can only talk to `'self'`.
 
+## 2b. Where CMR apps get built (authoring surfaces)
+
+Every surface produces the same managed app (inventory `origin` tells you which one). Check what's switched on in the tenant before you recommend one.
+
+| Surface | Who | Tenant switch (preview defaults) | Build billed as |
+|---|---|---|---|
+| Microsoft Copilot app → **Copilot Code** | everyone, conversational | rolls out in waves (Frontier first) | Copilot licence / Copilot Credits |
+| Copilot **Cowork** → App builder skill | M365 Copilot users | Frontier programme; spending policy in MAC | per-user Copilot Credits |
+| Copilot Studio → **Apps** | makers in Studio | on by default; `powerPlatform.powerApps.enableManagedAppsMcsPreview` (can be scoped to a security group) | Copilot Credits on the environment |
+| `ms` CLI + coding agent: **GitHub Copilot CLI**, **Claude Code**, **OpenAI Codex**, others reading agent plugins / `AGENTS.md` | pro devs | MAC "Allow app creation with the Copilot Managed Runtime CLI", **off by default**, per environment or environment group | Power Apps Premium or Copilot Credits per call |
+| Third-party builders that target CMR (Microsoft names Lovable) | makers | same CLI / external-artifact switches | vendor + CMR run cost |
+
+Not CMR: Power Apps code apps (`pac code`), canvas apps, Power Pages, and the older vibe.powerapps.com experience that the newer surfaces supersede. Running an app is billed per user separately from building it (`cmr-licensing-cost`). To move a citizen-built app to Git and a pro-dev loop, use `cmr-citizen-handoff`.
+
 ## 3. Lifecycle → skill map
 
 | Stage | Skill |

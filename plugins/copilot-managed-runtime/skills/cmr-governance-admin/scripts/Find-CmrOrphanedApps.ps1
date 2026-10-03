@@ -13,6 +13,10 @@
   ./Find-CmrOrphanedApps.ps1 -OutFile cmr-apps.csv
 .EXAMPLE
   ./Find-CmrOrphanedApps.ps1 -PowerPlatformToken $pp -GraphToken $gr -ActiveDays 14 -StaleDays 60
+.EXAMPLE
+  ./Find-CmrOrphanedApps.ps1 -IncludeActiveUsers
+  Adds ActiveUsers and Sessions (distinct users / sessions in the last -ActiveDays days) per recently used app,
+  from the tenant usage endpoint behind the admin center Usage tab. Undocumented preview API: one call per app.
 #>
 [CmdletBinding()]
 param(
@@ -20,6 +24,7 @@ param(
   [string]$GraphToken,
   [int]$ActiveDays = 30,
   [int]$StaleDays = 90,
+  [switch]$IncludeActiveUsers,
   [string]$OutFile = 'cmr-app-inventory.csv'
 )
 $ErrorActionPreference = 'Stop'
@@ -64,6 +69,27 @@ Invoke-InventoryQuery 'microsoft.powerplatformusage/usagerecords' @('id', 'prope
   ForEach-Object { $lastUsed[$_.properties.resourceId] = [datetime]$_.properties.lastUsed }
 Write-Host "$($apps.Count) CMR apps, $($lastUsed.Count) app usage records."
 
+# Optional: distinct active users and sessions per app (same endpoint the admin center Usage tab calls).
+# Host = tenant ID without dashes, with a dot before the last two characters.
+$activity = @{}
+if ($IncludeActiveUsers) {
+  $claims = $PowerPlatformToken.Split('.')[1].Replace('-', '+').Replace('_', '/')
+  $claims = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($claims.PadRight($claims.Length + (4 - $claims.Length % 4) % 4, '=')))
+  $t = ($claims | ConvertFrom-Json).tid.Replace('-', '')
+  $usageBase = "https://$($t.Substring(0, $t.Length - 2)).$($t.Substring($t.Length - 2)).tenant.api.powerplatform.com/usage/PowerAppsTimeSeries?api-version=1"
+  $from = (Get-Date).ToUniversalTime().AddDays(-$ActiveDays).ToString('yyyy-MM-ddT00:00:00Z')
+  $to = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddT23:59:59Z')
+  $recent = @($apps | Where-Object { $lastUsed[$_.name] -and $lastUsed[$_.name] -ge (Get-Date).AddDays(-$ActiveDays - 1) })
+  Write-Host "Reading active users for $($recent.Count) recently used apps..."
+  foreach ($a in $recent) {
+    $uri = "$usageBase&`$filter=Date ge $from and Date le $to and ResourceId eq '$($a.name)'&timeGrain=all"
+    try {
+      $v = @((Invoke-RestMethod -Uri $uri -Headers @{ Authorization = "Bearer $PowerPlatformToken" }).value)
+      $activity[$a.name] = [pscustomobject]@{ Users = ($v | Measure-Object ActiveUsers -Sum).Sum; Sessions = ($v | Measure-Object ActiveSessions -Sum).Sum }
+    } catch { Write-Warning "Usage lookup failed for $($a.name): $($_.Exception.Message)" }
+  }
+}
+
 # Owner check: getByIds silently omits deleted objects, so "requested but missing" = deleted.
 $ids = @($apps | ForEach-Object { $_.properties.ownerId; $_.properties.createdBy } | Where-Object { $_ } | Sort-Object -Unique)
 $users = @{}
@@ -104,6 +130,8 @@ $result = foreach ($a in $apps) {
     CreatorState   = Get-OwnerState $p.createdBy
     LastUsed       = if ($used) { $used.ToString('yyyy-MM-dd') } else { 'never' }
     DaysSinceUse   = $daysSinceUse
+    ActiveUsers    = $activity[$a.name].Users
+    Sessions       = $activity[$a.name].Sessions
     LastModifiedAt = $p.lastModifiedAt
     Origin         = $p.origin
     Quarantined    = $p.isQuarantined

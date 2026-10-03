@@ -1,0 +1,20 @@
+{
+  "name": "copilot-managed-runtime-skills",
+  "interface": {
+    "displayName": "Copilot Managed Runtime skills"
+  },
+  "plugins": [
+    {
+      "name": "copilot-managed-runtime",
+      "source": {
+        "source": "local",
+        "path": "./plugins/copilot-managed-runtime"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
