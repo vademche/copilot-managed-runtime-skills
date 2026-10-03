@@ -23,11 +23,13 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | `ms app create` fails: can't create | no routing rule / CLI creation disabled for your group | admin: routing + "Allow app creation with the CMR CLI" |
 | `ms app create --repo <url>` fails | repo not empty / not GHEC / mapping expired | empty GHEC repo; `ms git auth refresh --repo <url>`; `--force-reauth` |
 | `ms app clone` fails | external repo or `repoType none` | `git clone <external-url>`; none-apps have no repo |
-| `git push` prompts / fails in agent shell (platform repo) | Git Credential Manager needs interactive OAuth | run push in a user terminal once, or use a bearer header for a single command (never persist tokens) |
+| `git push` prompts / fails in agent shell (platform repo) | Git Credential Manager needs interactive OAuth; in non-interactive shells its browser flow can fail ("Missing 'code' in response") | push once from a user terminal; or get a token via an Entra **device-code** flow (client ID = the repo's `credential.<url>.oauthclientid` git config, scope `https://api.powerplatform.com/.default`) and push with `git -c credential.helper= -c "http.extraHeader=Authorization: Bearer <token>" push`. Start polling in the same process (codes expire in ~15 min), keep the token in memory/temp only, delete it after |
 | `git push` rejected: unrelated histories | remote has an "Initial commit" | `git pull --allow-unrelated-histories`, resolve, push |
 | CRLF warnings on Windows | line endings | `.gitattributes` with `* text=auto eol=lf` |
 | `--include-blocked` unknown | CLI drift | 0.27 lists all by default; use `--only-allowed` |
 | `ms app show` deprecation | renamed | `ms app info` |
+| `ms project` unknown command | hidden behind preview flag | `MS_CLI_ALM=true` |
+| `ms project create` → `404 RouteNotFound` (`/managedprojects/projects`) | managed-projects API not rolled out to the tenant/region | use separate apps per stage; retry on newer CLI/service |
 
 ## Build / deploy
 
@@ -47,6 +49,8 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Consent dialog on first launch | expected — one per connection | minimise connectors; SSO connections |
+| Consent dialog **reappears** for all users after a deploy | a data source/connection was added: the dialog lists every connection again | batch connector additions; warn users in release notes |
+| Header bar still visible after `set-setting --show-header false` | not deployed yet, or you're looking at the host loading screen (always shows it) | commit + `ms app deploy`; check the loaded app |
 | `CONNECTION_REFERENCE_NOT_FOUND` / `CONNECTION_NOT_FOUND` | config drift / user didn't consent / connection deleted | redeploy after `ms app refresh data-source`; user re-consents |
 | `CONNECTION_CONFIG_FETCH_FAILED` | host/network or preview outage | retry with backoff; check status |
 | Refused to load / connect (console CSP error) | CDN asset, `fetch` to external origin, worker, iframe, form | bundle assets; use connectors; admin CSP change (report-only first) |

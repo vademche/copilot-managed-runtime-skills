@@ -42,6 +42,7 @@ Rules:
 - **Never** reuse another person's connection; connections are per user and brokered at runtime.
 - Ask the user to choose when more than one dataset/table matches — don't guess.
 - Commit `ms.config.json` **and** `generated/` together; review the generated diff (re-running codegen can regenerate other services too).
+- Adding a connector to a **live** app means every user gets the consent dialog again on their next launch, listing all connections. Batch additions into one release and tell users beforehand.
 
 ## 3. Refresh / remove
 

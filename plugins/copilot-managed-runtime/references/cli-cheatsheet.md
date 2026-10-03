@@ -27,8 +27,10 @@ ms <command> --help                          # authoritative flag list for the i
 | `MS_CLI_SP_CLIENT_ID`, `MS_CLI_SP_CLIENT_SECRET`, `MS_CLI_SP_TENANT_ID` | Service-principal auth (CI). |
 | `MS_CLI_USE_SP_AUTH=true` | Force SP auth (auto-on when `CI=true` and SP vars exist). |
 | `MS_CLI_CLOUD_INSTANCE` | Cloud override used by the GitHub Actions. |
-| `MS_CLI_ALM=true` | Unlocks preview ALM flags (`--deployment`, `add config`). |
+| `MS_CLI_ALM=true` | Unlocks preview ALM flags (`--deployment`, `add config`) **and the hidden `ms project` command group**. |
 | `MS_CLI_TELEMETRY_LOCATION` | Where buffered CLI telemetry is written. |
+| `MS_CLI_MAAF_DEPLOY_VIA_MANAGED_DEVOPS=2\|3` | Routes `ms app deploy` through the managed-DevOps pipeline; with `--no-wait` returns an operation ID instead of blocking. Undocumented — don't depend on it in CI. |
+| `MS_CLI_HTTP_FORWARD_HEADERS`, `MS_CLI_MAAF_DEBUG_ENVIRONMENT_ID`, `MS_CLI_MAAF_GRS_ENDPOINT_OVERRIDE` | Internal / debugging hooks found in the CLI bundle (0.27). Never set them in shared scripts. |
 
 ## Auth
 
@@ -105,10 +107,12 @@ ms app share list [--access play|edit]
 ms app share link create | list | revoke      # blocked by default sharing rules (viral sharing)
 ms app list --permission edit|play --json     # {appId, displayName, lastDeployedTime, appPlayUri, hasEditAccess, cloneUrl}
 ms app info --json                            # server-side state: owners, last deployed commit, live/preview URLs
-ms app get-settings
-ms app set-setting --show-header false
+ms app get-settings [--json]
+ms app set-setting --show-header false        # writes appSettings.showHeader; applies on next dev/deploy (see note)
 ms app delete [--app <name>] [-e <env-id>] --force   # does NOT delete local code or the Git repo
 ```
+
+**`--show-header false` (verified, 0.27):** `showHeader` is the only app setting in the 0.27 schema. After deploy, the host header bar (home button + user avatar) disappears from the running app, but the host **loading screen** ("Fetching your app…") still shows it. Hiding it means your app must provide its own navigation, user identity (`getUser()`), and a way back to the app list. Commit `ms.config.json`, then deploy.
 
 ## Telemetry (CLI)
 
@@ -117,6 +121,16 @@ ms telemetry status | enable | disable [--remote|--console]
 ```
 
 ## Preview ALM (only in tenants with managed projects)
+
+`MS_CLI_ALM=true` reveals a hidden **`ms project`** group (not in `ms --help` otherwise):
+
+```bash
+MS_CLI_ALM=true ms project create ./field-service --display-name "Field Service" [-e <env-id>]  # managed project + platform repo, writes ms.project.config.json
+MS_CLI_ALM=true ms project info [--project-id <id>] [--json]                                     # project and its apps
+# then run `ms app create` INSIDE the project folder: the app gets projectId and is listed under components.apps
+```
+
+Observed (0.27, public cloud, test tenant): `ms project create` returned **404 `RouteNotFound`** on `/managedprojects/projects`, so the service-side API was not yet rolled out and nothing was created. There is **no `ms project delete`**. Check `ms project info` before you plan on overlays; if the route 404s, use separate apps per stage.
 
 ```bash
 MS_CLI_ALM=true ms app add config --deployment <name>

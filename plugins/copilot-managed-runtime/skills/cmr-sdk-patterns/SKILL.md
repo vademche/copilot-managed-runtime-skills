@@ -75,6 +75,7 @@ initializeLogger({
 - Keep generated types out of component props; map to domain types (survives regeneration).
 - Error boundary at the root showing a friendly message + correlation ID.
 - Accessibility: Fluent UI v9 (or your design system), keyboard nav, labels.
+- **Host header:** keep it by default, since it gives users a consistent home button and identity. Hide it (`ms app set-setting --show-header false`, then commit and deploy) only for kiosk/full-bleed UIs, and then render your own app bar with the user's name from `getUser()` and a home/exit link. The host loading screen keeps its header regardless.
 
 ## Anti-patterns
 

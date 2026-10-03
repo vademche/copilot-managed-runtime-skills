@@ -30,7 +30,7 @@ ms app add data-source --deployment test --for <data-source-name> ...   # rebind
 ms app deploy --deployment test
 ```
 
-Fails with "App is not associated with a managed project" when the tenant hasn't provisioned it — fall back to separate apps.
+Fails with "App is not associated with a managed project" when the app wasn't created inside a **managed project**. Projects come from the hidden `MS_CLI_ALM=true ms project create` (writes `ms.project.config.json`); `ms app create` run inside that folder links the app (`projectId` in `ms.config.json`). In tests on 0.27 the project API returned `404 RouteNotFound`, meaning it wasn't rolled out. Probe with `ms project info` first, and if it isn't available, fall back to separate apps. Projects cannot be deleted from the CLI, so don't create throwaway ones.
 
 ## 3. GitHub Actions (Model B) — hardened
 

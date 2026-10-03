@@ -50,7 +50,7 @@ Owned by the CLI and SDK. **Do not hand-edit** — use `ms app add/remove/refres
 
 ## All schema properties (schema as of ms 0.27.0)
 
-`$schema`, `version`, `appId`, `appDisplayName`, `description`, `environmentId`, `buildPath`, `buildCommand`, `buildEntryPoint`, `iconPath`, `localAppUrl`, `cloud` (`public|usgov|usgovhigh|usgovdod|china`, plus internal `test|preprod`), `repositoryId`, `repoType` (`native|github|none`), `externalRepoUrl`, `connectionReferences`, `appSettings` (`showHeader`), and three **undocumented / forward-looking** properties:
+`$schema`, `version`, `appId`, `projectId` (set when the app was created inside a managed project, see `cmr-alm-cicd`), `appDisplayName`, `description`, `environmentId`, `buildPath`, `buildCommand`, `buildEntryPoint`, `buildType` (`build|none`), `iconPath`, `localAppUrl`, `cloud` (`public|usgov|usgovhigh|usgovdod|china`, plus internal `test|preprod`), `repositoryId`, `repoType` (`native|github|none`), `externalRepoUrl`, `connectionReferences`, `appSettings` (`showHeader` is the only setting in 0.27 and defaults to `true`), and three **undocumented / forward-looking** properties:
 
 | Property | Shape | Status |
 |---|---|---|
@@ -70,6 +70,7 @@ Agents: if you see these in a repo, preserve them and ask the owner; don't inven
 | Path | Commit? | Notes |
 |---|---|---|
 | `ms.config.json` | ✅ | source of truth for bindings |
+| `ms.project.config.json` | ✅ | only in managed-project folders (preview): `projectId`, `displayName`, `repositoryId`, `repoType`, `environmentId`, `components.apps[]` |
 | `generated/` | ✅ | typed services; regenerate, don't edit |
 | `.ms/schemas/` | ✅ | connector schemas used by codegen |
 | `.ms/packed/` | ❌ | `ms app pack` staging (gitignored by template) |
