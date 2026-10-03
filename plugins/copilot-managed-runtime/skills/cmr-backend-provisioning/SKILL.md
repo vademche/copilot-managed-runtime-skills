@@ -1,6 +1,6 @@
 ---
 name: cmr-backend-provisioning
-description: Provision and ship the backend a Copilot Managed Runtime app binds to — Dataverse tables in a solution (publisher, unmanaged in dev, managed downstream), SharePoint group sites/lists/libraries and Planner plans via idempotent Graph scripts, repo layout (/app + /dataverse + /provisioning), schema-first release order, and how Dataverse solutions relate to the app's Git repo. USE WHEN an app needs new tables/lists/libraries/plans, when asked "managed or unmanaged solution?", "do I need a solution and a repo?", how to promote Dataverse schema with a CMR app, or how to script backend setup for citizen-to-pro-dev handoff. DO NOT USE WHEN binding existing data sources only (use cmr-data-sources / cmr-dataverse), or for canvas/model-driven/code-apps solution ALM.
+description: Provision and ship the backend a Copilot Managed Runtime app binds to — Dataverse tables in a solution (publisher, unmanaged in dev, managed downstream), SharePoint group sites/lists/libraries and Planner plans via idempotent Graph scripts, repo layout (/app + /dataverse + /provisioning), schema-first release order, and how Dataverse solutions relate to the app's Git repo. USE WHEN an app needs new tables/lists/libraries/plans, when asked "managed or unmanaged solution?", "do I need a solution and a repo?", how to promote Dataverse schema with a CMR app, how to script backend setup for citizen-to-pro-dev handoff, or whether Work IQ / Dataverse MCP / Copilot Studio / Cowork can create tables and lists (and what to do with the ones they created). DO NOT USE WHEN binding existing data sources only (use cmr-data-sources / cmr-dataverse), or for canvas/model-driven/code-apps solution ALM.
 user-invocable: true
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 ---
@@ -58,6 +58,15 @@ Citizen apps often start on a SharePoint list or a table the maker created ad ho
 3. Add `/dataverse` and `/provisioning` next to the app in the GHEC repo.
 4. Switch to the two-track release.
 
+## 5. AI-created containers (Work IQ, Dataverse MCP, Copilot Studio, Cowork)
+
+Full matrix: [backend-provisioning](../../references/backend-provisioning.md) §10.
+
+- **Citizens**: Copilot Studio Apps proposes Dataverse tables; Cowork and Microsoft 365 App Builder use Microsoft Lists; Work IQ can create lists, columns, Microsoft 365 groups (team sites) and Planner plans once an admin enables writes.
+- **Pro-devs** can call the same tools from a coding agent (Work IQ MCP / `@microsoft/workiq`, the Dataverse MCP server in VS Code). Use them against **dev only**, and prefer asking the agent to *write* the provisioning script or solution instead of mutating the tenant.
+- **Lab-verified**: Dataverse MCP `create_table` has no solution or publisher parameter, so the table lands unmanaged in the Default solution with the `cr<xxx>_` default prefix. Metadata processing blocks an immediate update/delete.
+- **Rule**: AI-created containers are prototypes. Adopt them into a solution or a `/provisioning` script before production (AP-78). The app itself never calls schema tools at runtime (AP-31).
+
 ## Anti-patterns
 
-AP-31 … AP-39, AP-12, AP-52. See [anti-patterns](../../references/anti-patterns.md).
+AP-31 … AP-39, AP-12, AP-52, AP-78, AP-79. See [anti-patterns](../../references/anti-patterns.md).

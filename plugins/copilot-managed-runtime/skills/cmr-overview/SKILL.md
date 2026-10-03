@@ -54,7 +54,7 @@ If signals are mixed, stop and ask the user which product they target (AP-01).
 | Environments, GitHub Actions, external artifacts, preview ALM | `cmr-alm-cicd` |
 | Share with users/groups/SPs, owners | `cmr-sharing` |
 | Citizen app (Copilot Studio / Cowork) → pro-dev | `cmr-citizen-handoff` |
-| Admin: env groups, policies, inventory, audit | `cmr-governance-admin` |
+| Admin: env groups, policies, inventory, audit, orphaned apps, adoption | `cmr-governance-admin` |
 | Licensing, Copilot Credits, cost-aware design | `cmr-licensing-cost` |
 | Something is broken | `cmr-troubleshooting` |
 | Review a CMR repo / PR | `cmr-review` |
@@ -69,4 +69,4 @@ Microsoft's own plugin (`microsoft-managed-apps@Managed-Apps`) covers the basic 
 4. Confirm with the user before `deploy`, `delete`, `share`/`unshare`, or anything that changes who can see data.
 5. Keep examples tenant-neutral (`contoso`, `<environment-id>`) (AP-73).
 
-References: [cli-cheatsheet](../../references/cli-cheatsheet.md) · [sdk-api](../../references/sdk-api.md) · [generated-code](../../references/generated-code.md) · [ms-config](../../references/ms-config.md) · [connectors-and-policy](../../references/connectors-and-policy.md) · [governance-quick-ref](../../references/governance-quick-ref.md) · [source-control](../../references/source-control.md) · [backend-provisioning](../../references/backend-provisioning.md) · [solutions-and-alm](../../references/solutions-and-alm.md) · [anti-patterns](../../references/anti-patterns.md) · [troubleshooting](../../references/troubleshooting.md)
+References: [cli-cheatsheet](../../references/cli-cheatsheet.md) · [sdk-api](../../references/sdk-api.md) · [generated-code](../../references/generated-code.md) · [ms-config](../../references/ms-config.md) · [connectors-and-policy](../../references/connectors-and-policy.md) · [governance-quick-ref](../../references/governance-quick-ref.md) · [source-control](../../references/source-control.md) · [backend-provisioning](../../references/backend-provisioning.md) · [solutions-and-alm](../../references/solutions-and-alm.md) · [inventory-orphans-adoption](../../references/inventory-orphans-adoption.md) · [anti-patterns](../../references/anti-patterns.md) · [troubleshooting](../../references/troubleshooting.md)

@@ -14,7 +14,7 @@ CMR runs single-page apps (React/Vite/TypeScript or any framework) on a Microsof
 - **Stay inside policy.** That means connector and MCP allow-lists, sharing limits, CSP, and the environment-group routing set by admins.
 - **Keep generated code generated.** Wrap `generated/services/*` behind `src/data/*`; never hand-edit them.
 - **Hand over cleanly.** A citizen maker starts an app in Copilot Studio or Cowork; a pro developer takes over the source and can give it back.
-- **Avoid the 58 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
+- **Avoid the 64 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
 
 These skills package that knowledge so a coding agent can follow it step by step.
 
@@ -23,7 +23,7 @@ These skills package that knowledge so a coding agent can follow it step by step
 ```
 plugins/copilot-managed-runtime/
 ├── skills/        17 skills (cmr-*) — see table below
-├── references/    11 shared reference docs the skills link to
+├── references/    12 shared reference docs the skills link to
 ├── agents/        cmr-architect, cmr-reviewer
 └── hooks/         PreToolUse guard that blocks edits to generated code
 ```
@@ -45,7 +45,7 @@ plugins/copilot-managed-runtime/
 | `cmr-alm-cicd` | Set up branching, test/prod stages, and GitHub Actions with service principals |
 | `cmr-sharing` | Share with groups at the right access level |
 | `cmr-citizen-handoff` | Take over a Copilot Studio or Cowork app as pro-code, and hand it back |
-| `cmr-governance-admin` | Manage environment groups, ACP/DLP, sharing limits, CSP, inventory and audit |
+| `cmr-governance-admin` | Manage environment groups, ACP/DLP, sharing limits, CSP, inventory and audit; find orphaned apps and measure adoption |
 | `cmr-licensing-cost` | Understand licensing paths and Copilot Credits, and design with cost in mind |
 | `cmr-troubleshooting` | Diagnose CLI, git, binding, build, CSP, licence and policy errors |
 | `cmr-review` | Run a production-readiness review against the anti-pattern catalogue |

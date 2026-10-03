@@ -1,13 +1,13 @@
 ---
 name: cmr-governance-admin
-description: Tenant administration and governance for Copilot Managed Runtime — environment groups and routing, connector/MCP and action policies (ACP vs DLP), sharing rules, CSP, CLI creation and external-artifact switches, inventory, monitoring, alerts, Purview audit, and a governance operating model for citizen and pro-dev makers. USE WHEN an admin or CoE asks how to govern, restrict, monitor, audit or roll out CMR, or when a maker is blocked by policy and needs to know what to ask for. DO NOT USE WHEN administering Power Apps canvas/model-driven environments unrelated to CMR.
+description: Tenant administration and governance for Copilot Managed Runtime — environment groups and routing, connector/MCP and action policies (ACP vs DLP), sharing rules, CSP, CLI creation and external-artifact switches, tenant-wide app inventory, orphaned apps (owner left), adoption/usage, monitoring, alerts, Purview audit, and a governance operating model for citizen and pro-dev makers. USE WHEN an admin or CoE asks how to govern, restrict, monitor, audit or roll out CMR, how to find all apps citizens built, which apps are orphaned or still used, or when a maker is blocked by policy and needs to know what to ask for. DO NOT USE WHEN administering Power Apps canvas/model-driven environments unrelated to CMR.
 user-invocable: true
-allowed-tools: Read, Grep, Glob, AskUserQuestion
+allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---
 
 # Governance and administration
 
-Reference: [governance-quick-ref](../../references/governance-quick-ref.md) · [connectors-and-policy](../../references/connectors-and-policy.md) · [source-control](../../references/source-control.md) (GitHub enterprise policies for `github` apps).
+Reference: [governance-quick-ref](../../references/governance-quick-ref.md) · [connectors-and-policy](../../references/connectors-and-policy.md) · [source-control](../../references/source-control.md) (GitHub enterprise policies for `github` apps) · [inventory-orphans-adoption](../../references/inventory-orphans-adoption.md).
 
 ## 1. The control plane
 
@@ -40,7 +40,7 @@ Take "full control" of a connector policy only if you'll own updates — Microso
 - Review environments with no group regularly (PPAC → Environments → *Environment group* column, or the BAP API with `$expand=properties.parentEnvironmentGroup`).
 - Keep a tenant-wide DLP as a backstop (AP-36).
 
-Also govern the **Dataverse MCP** schema tools (`create_table` / `update_table` / `delete_table`) and the MCP allowed-clients list. Schema should only change through solutions (AP-31, AP-37).
+Also govern the **Dataverse MCP** schema tools (`create_table` / `update_table` / `delete_table`) and the MCP allowed-clients list. Schema should only change through solutions (AP-31, AP-37). The same applies to **Work IQ write tools**: they can create SharePoint lists, columns, Microsoft 365 groups (and so team sites) and Planner plans. They're off by default; enable them only for named groups (AP-79). Containers an AI created are prototypes until a pro-dev adopts them (AP-78).
 
 ## 3. Maker → admin request templates
 
@@ -50,20 +50,38 @@ Also govern the **Dataverse MCP** schema tools (`create_table` / `update_table` 
 
 ## 4. Monitoring and audit
 
-- **Inventory** (≈15 min latency): find orphaned apps, block/delete risky ones.
+- **Inventory** (≈15 min latency): every CMR app in the tenant, with owner, environment and origin. See §5 for orphans and adoption.
 - **Monitor**: open success rate, time-to-interactive P75, data request success/latency; set alerts (max 10/tenant) on critical apps.
 - **Purview**: search `PowerPlatformAdminActivity` for `ApiEndpointCallEvent` on `/build` and `/deploy`, `LaunchPowerApp`, `DeletePowerApp`, env-group rule changes.
 - **Gap**: pushes to platform-managed Git are not audited → require external GHEC repos (branch protection + audit log streaming) for regulated apps.
 - **Cost**: MAC → Copilot → Cost management for Copilot Credits by service (runtime, Cowork, Work IQ API).
 
-## 5. Operating model (CoE)
+## 5. Find citizen apps, orphans and adoption
+
+Full detail: [inventory-orphans-adoption](../../references/inventory-orphans-adoption.md).
+
+1. **List every app.** Use the inventory API, PPAC Inventory or MAC → Apps → All apps. Not `ms app list`: it only shows apps shared with you (AP-74). Not the Power Apps admin cmdlets or the CoE kit: they don't see CMR apps (AP-77). CMR apps are `microsoft.powerapps/apps` with `subType microsoftApp`; `origin` tells you how each one was created.
+2. **Adoption.** Join the inventory's `microsoft.powerplatformusage/usagerecords` (`lastUsed`, daily) on app ID. No record = never launched. MAC Usage / Monitor tabs and Purview `LaunchPowerApp` give users and sessions.
+3. **Orphans.** Resolve `ownerId` / `createdBy` with Graph `directoryObjects/getByIds`: missing = deleted user, `accountEnabled: false` = disabled.
+4. **Classify** with the 2×2 below and act on 🔴 first.
+
+| | Used recently | Unused / never |
+|---|---|---|
+| **Orphaned** | 🔴 Act now: new accountable owner, get the source, harden via `cmr-citizen-handoff` | 🟡 Retire: notify, **Block**, delete after grace (AP-76) |
+| **Owned** | 🟢 Healthy: ≥2 owners, group sharing, alerts; promote to pro-dev track above a usage threshold | 🟡 Nudge the owner |
+
+Run it with [`scripts/Find-CmrOrphanedApps.ps1`](scripts/Find-CmrOrphanedApps.ps1). It's read-only, needs a **delegated** admin token (service principals get 403), and writes a CSV. Confirm with the user before running it against a tenant.
+
+**No ownership reassignment for CMR apps** in preview (AP-75): the Power Apps admin API returns 404 for them, the `ms` CLI has no owner command, and MAC offers Block and Delete only. Recovery depends on someone with **edit** access running `ms app clone --app <app-id>`, or on the app's external GHEC repo. That's why ≥2 edit owners through a group is a hard rule (AP-65).
+
+## 6. Operating model (CoE)
 
 1. Publish an internal "CMR starter" template repo (`ms app create -t github:<org>/<repo>/<dir>`) with security defaults.
 2. Install these skills for every developer's coding agent (repo README).
 3. Require ≥2 owners and group-based sharing for any app with >N users.
-4. Quarterly: inventory review, ownerless apps, connector usage, Monitor failures, cost outliers.
+4. Quarterly: run `Find-CmrOrphanedApps.ps1`, resolve every 🔴 row, retire 🟡 rows, review connector usage, Monitor failures and cost outliers.
 5. Promote citizen apps that cross a usage threshold into the pro-dev track (`cmr-citizen-handoff`).
 
 ## Anti-patterns
 
-AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65. See [anti-patterns](../../references/anti-patterns.md).
+AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65, AP-74 … AP-79. See [anti-patterns](../../references/anti-patterns.md).

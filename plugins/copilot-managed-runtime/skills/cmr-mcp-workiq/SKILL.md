@@ -61,6 +61,14 @@ Discover tools once with `rpc('tools/list', {})` during development (it works wi
 - Cache per session; don't call on every keystroke (cost, AP-64).
 - Treat output as untrusted input (prompt injection from M365 content).
 
+## 5. Write tools: content yes, containers no
+
+Some MCP servers on the default allow-list can **create containers**:
+- the Work IQ SharePoint server (`shared_workiqsharepoint` → `mcp_SharePointRemoteServer`): createList, createColumn, …
+- the Dataverse MCP (`commondataserviceforapps` → `/api/mcp`): `create_table`, `update_table`, `delete_table`
+
+An app may create **items** through them. It must never create lists, tables or columns at runtime (AP-31, AP-32). Bind only the tools the app needs, and handle the consent prompt. Work IQ connectors use OAuth/SSO, so `ms app add data-source` creates no connection at design time; the connection is authenticated when the user first consents in the running app. Container creation belongs in `/provisioning` scripts: see `cmr-backend-provisioning` §5.
+
 ## Anti-patterns
 
-AP-29, AP-45, AP-64. See [anti-patterns](../../references/anti-patterns.md) · [connectors-and-policy](../../references/connectors-and-policy.md).
+AP-29, AP-31, AP-32, AP-45, AP-64, AP-79. See [anti-patterns](../../references/anti-patterns.md) · [connectors-and-policy](../../references/connectors-and-policy.md).

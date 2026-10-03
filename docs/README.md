@@ -36,6 +36,14 @@ An app a maker builds in Copilot Studio or Cowork is an ordinary Git-backed CMR 
 
 Skill: `cmr-citizen-handoff`.
 
+## 4b. Finding citizen apps, orphans and adoption
+
+![Orphans and adoption](images/cmr-orphans-adoption.svg)
+
+`ms app list` only shows apps shared with you, so it can't tell an admin what citizens have built. Three read-only signals can: the **Power Platform inventory API** (every CMR app, with its owner, environment and origin), the inventory's **usage records** (last day each app was used), and **Entra ID** (is the owner deleted or disabled?). Joined, they give a 2×2 matrix. The top-left cell, orphaned but still used, is a business app nobody can fix, and it comes first. CMR apps have no ownership reassignment in preview, so prevention (two edit owners through a group) is the real control.
+
+Skill: `cmr-governance-admin` (script `Find-CmrOrphanedApps.ps1`). Reference: [inventory-orphans-adoption](../plugins/copilot-managed-runtime/references/inventory-orphans-adoption.md).
+
 ## 5. ALM and CI/CD
 
 ![ALM and CI/CD](images/cmr-alm-cicd.svg)

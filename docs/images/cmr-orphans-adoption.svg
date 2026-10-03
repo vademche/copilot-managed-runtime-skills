@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640" font-family="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" role="img" aria-label="Find citizen apps, orphans and adoption">
+<title>Find citizen apps, orphans and adoption</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker></defs>
+<rect width="1200" height="640" fill="#F8FAFC"/>
+<text x="32" y="50" font-size="26" fill="#0F172A" font-weight="700">Find citizen apps, orphans and adoption</text>
+<text x="32" y="76" font-size="15" fill="#475569">Orphaned + still used = a business app nobody can fix. Act on it first.</text>
+<text x="32" y="112" font-size="12" fill="#64748B" font-weight="700" letter-spacing="1.2">SIGNALS (READ-ONLY, DELEGATED ADMIN)</text>
+<rect x="32" y="122" width="360" height="96" rx="12" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/>
+<text x="46" y="148" font-size="16" fill="#0C4A6E" font-weight="700">Inventory API</text>
+<text x="46" y="169" font-size="13" fill="#0C4A6E">every CMR app: owner, env, origin</text>
+<text x="46" y="188" font-size="13" fill="#0C4A6E">apps · subType microsoftApp</text>
+<line x1="392" y1="170" x2="452" y2="300" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="32" y="240" width="360" height="96" rx="12" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/>
+<text x="46" y="266" font-size="16" fill="#0C4A6E" font-weight="700">Usage records</text>
+<text x="46" y="287" font-size="13" fill="#0C4A6E">lastUsed per app (daily)</text>
+<text x="46" y="306" font-size="13" fill="#0C4A6E">no record = never launched</text>
+<line x1="392" y1="288" x2="452" y2="300" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="32" y="358" width="360" height="96" rx="12" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/>
+<text x="46" y="384" font-size="16" fill="#0C4A6E" font-weight="700">Entra ID (Graph getByIds)</text>
+<text x="46" y="405" font-size="13" fill="#0C4A6E">missing id = deleted owner</text>
+<text x="46" y="424" font-size="13" fill="#0C4A6E">accountEnabled false = disabled</text>
+<line x1="392" y1="406" x2="452" y2="300" stroke="#475569" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="32" y="482" width="360" height="28" rx="14.0" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.2"/>
+<text x="212.0" y="500.4642857142857" font-size="12.5" fill="#0C4A6E" text-anchor="middle">Find-CmrOrphanedApps.ps1 → CSV</text>
+<text x="679.0" y="136" font-size="14" fill="#0F172A" font-weight="700" text-anchor="middle">Used in the last 30 days</text>
+<text x="1009.0" y="136" font-size="14" fill="#0F172A" font-weight="700" text-anchor="middle">Unused 90 days / never</text>
+<text x="504" y="225.0" font-size="14" fill="#0F172A" font-weight="700" text-anchor="end">Orphaned</text>
+<text x="504" y="387.0" font-size="14" fill="#0F172A" font-weight="700" text-anchor="end">Owned</text>
+<rect x="520" y="150" width="318" height="150" rx="12" fill="#FFE4E6" stroke="#E11D48" stroke-width="1.5"/>
+<text x="534" y="176" font-size="18" fill="#881337" font-weight="700">ACT NOW</text>
+<text x="534" y="197.5" font-size="13.5" fill="#881337">name an accountable owner</text>
+<text x="534" y="217.0" font-size="13.5" fill="#881337">clone with an edit holder</text>
+<text x="534" y="236.5" font-size="13.5" fill="#881337">harden: cmr-citizen-handoff</text>
+<rect x="850" y="150" width="318" height="150" rx="12" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+<text x="864" y="176" font-size="18" fill="#78350F" font-weight="700">Retire candidate</text>
+<text x="864" y="197.5" font-size="13.5" fill="#78350F">notify recent users</text>
+<text x="864" y="217.0" font-size="13.5" fill="#78350F">Block → grace period → delete</text>
+<text x="864" y="236.5" font-size="13.5" fill="#78350F">never delete before checking use</text>
+<rect x="520" y="312" width="318" height="150" rx="12" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+<text x="534" y="338" font-size="18" fill="#14532D" font-weight="700">Healthy</text>
+<text x="534" y="359.5" font-size="13.5" fill="#14532D">≥2 edit owners via a group</text>
+<text x="534" y="379.0" font-size="13.5" fill="#14532D">Monitor alerts</text>
+<text x="534" y="398.5" font-size="13.5" fill="#14532D">above threshold → pro-dev track</text>
+<rect x="850" y="312" width="318" height="150" rx="12" fill="#F1F5F9" stroke="#64748B" stroke-width="1.5"/>
+<text x="864" y="338" font-size="18" fill="#1E293B" font-weight="700">Nudge the owner</text>
+<text x="864" y="359.5" font-size="13.5" fill="#1E293B">keep, archive or delete?</text>
+<text x="864" y="379.0" font-size="13.5" fill="#1E293B">owner decides</text>
+<rect x="32" y="540" width="1136" height="72" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
+<text x="52" y="570" font-size="14" fill="#F8FAFC" font-weight="700">No ownership reassignment for CMR apps in preview: prevention is the control (≥2 edit owners through a group).</text>
+<text x="52" y="594" font-size="13" fill="#CBD5E1">ms app list is not an inventory (only apps shared with you) · Power Apps admin cmdlets and the CoE kit don't see CMR apps.</text>
+</svg>

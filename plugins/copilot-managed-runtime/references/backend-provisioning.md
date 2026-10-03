@@ -179,4 +179,30 @@ Seed only **reference data** (categories, statuses) through scripts, and keep it
 - [ ] Security first: Dataverse roles per persona, SharePoint site membership through the M365 group. Sharing the app grants no data access.
 - [ ] After any schema change: `ms app refresh data-source -n <name>`, review the `generated/` diff, commit.
 
-Anti-patterns: AP-31 … AP-36, AP-12, AP-28. See [anti-patterns](anti-patterns.md).
+## 10. AI and MCP provisioning (Work IQ, Dataverse MCP, Copilot Studio, Cowork)
+
+Citizens increasingly get their containers created **by an AI** while they build. Pro-devs can drive the same tools from a coding agent. Know what each surface can create and where the result lands.
+
+| Surface | Who | Can create | Mechanism | Status |
+|---|---|---|---|---|
+| **Copilot Studio apps experience** | citizen | Dataverse tables (proposed, the maker reviews before creation) | built-in agent | documented |
+| **Copilot Cowork** (App skill, Frontier) | citizen | SharePoint lists for the app's data | Work IQ / SharePoint | documented, preview |
+| **Microsoft 365 App Builder** | citizen | Microsoft Lists only | not documented | documented (Lists only) |
+| **Work IQ MCP** (generic: `create_entity` on Graph-style paths) | citizen agent, or pro-dev via `@microsoft/workiq` in a coding agent | SharePoint lists, columns, site columns, content types, list items; Microsoft 365 groups (which provision a team site); Planner plans | MCP, delegated user | **writes off by default**: admin enables them in the Microsoft 365 admin center. Needs an M365 Copilot licence; billed in Copilot Credits. Path catalogue lab-verified; no site creation, no Dataverse schema |
+| **Work IQ SharePoint MCP** (`mcp_SharePointRemoteServer`, connector `shared_workiqsharepoint`, Premium) | agent / app | lists, columns, items, folders, small files | MCP via connector | documented; the Copilot Studio SharePoint MCP tools page marks the older tool set as legacy. The connection is OAuth and is only authenticated at user consent (a connection created by API stays `Unauthenticated`) |
+| **Dataverse MCP server** (`https://<org>.crm.dynamics.com/api/mcp`, or connector `commondataserviceforapps` → `/api/mcp`) | citizen agent, or pro-dev in VS Code / Copilot | `create_table`, `update_table` (add columns / choice options; never removes), `delete_table` (needs `hasUserApproved: true`) | MCP, delegated user | **lab-verified**. Client must be on the environment's Dataverse MCP allowed-clients list |
+| CMR app `ms app add data-source` | pro-dev | nothing: binds existing containers only | CLI | lab-verified |
+
+Lab findings for the Dataverse MCP `create_table` tool:
+- Arguments: `tablename` (no prefix), `displayname`, `description`, `item[]` columns (`name`, `type` such as `string`, `integer`, `decimal`, `money`, `boolean`, `datetime`, `choice`, `multiselect`, `lookup` + `relatedtable`, `file`, `image`; `required`, `maxLength`, `choices[]`). A primary name column is added automatically.
+- **There is no solution or publisher parameter.** The table was created **unmanaged, only in the Default solution, with the CDS Default Publisher prefix** (`cr<xxx>_`), user-owned. That's AP-34 by construction.
+- Right after creation, `delete_table` / `update_table` fail with "staged metadata … still being processed". Wait and retry. A later `delete_table` call returned `UnexpectedError` but the table **was** deleted, so always verify the result.
+- A CMR app bound to the Dataverse connector could call these tools at runtime (`InvokeMCP`). Don't (AP-31): disable the schema tools for app scenarios, or keep the app's environment off the allowed-clients list.
+
+Recommendation:
+1. **Prototype with AI, ship with code.** AI-created tables and lists are fine for a demo or a citizen's first version.
+2. **Adopt before production** (AP-78). Dataverse: `pac solution add-solution-component --solution-unique-name <Solution> --component <table-logical-name> --component-type 1` moves the table into a real solution, but it keeps the default prefix. If the prefix matters, recreate the table under the org publisher (§4) and migrate the rows. SharePoint: reverse-engineer the list into an idempotent `/provisioning` script (§5); move it to a group-owned site if needed.
+3. **Pro-devs: use AI to write the script, not to mutate the tenant.** Ask the coding agent to generate the §4/§5 scripts and the solution, then run them through review and CI. If you do use the Dataverse MCP or Work IQ tools from your coding agent, point them at a dev environment only.
+4. **Admins**: keep Work IQ writes off by default and enable them for named groups (AP-79); keep the Dataverse MCP allowed-clients list short; review the Default solution for unmanaged `cr*_` tables as part of the quarterly review.
+
+Anti-patterns: AP-31 … AP-36, AP-12, AP-28, AP-78, AP-79. See [anti-patterns](anti-patterns.md).

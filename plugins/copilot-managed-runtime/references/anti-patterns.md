@@ -99,3 +99,14 @@ Each entry: **what it looks like → why it hurts → do this instead.** IDs (`A
 | AP-71 | Guessing flags from docs | `ms <cmd> --help` first; CLI is source of truth |
 | AP-72 | Deleting apps / unsharing without explicit user confirmation | Destructive commands require explicit user intent in the current turn |
 | AP-73 | Pasting real tenant IDs/URLs into public issues, samples or skills | Anonymise: `<tenant-id>`, `<environment-id>`, `contoso` |
+
+## Inventory, orphans and AI-created containers
+
+| ID | Anti-pattern | Why | Instead |
+|---|---|---|---|
+| AP-74 | Using `ms app list` (or your own maker view) as the app inventory | It's RBAC-scoped: it only shows apps shared with you, so citizen apps nobody shared are invisible | Inventory API / PPAC Inventory / MAC All apps ([inventory-orphans-adoption](inventory-orphans-adoption.md)) |
+| AP-75 | Counting on an admin to reassign ownership when a maker leaves | CMR apps have no reassignment path in preview (the Power Apps admin cmdlets return 404, MAC offers Block / Delete only) | ≥2 edit owners through a group from day one; external GHEC repos for critical apps |
+| AP-76 | Deleting orphaned or "old" apps without checking usage | An orphaned app people still use is business-critical; deleting it causes an outage with no source to restore | Join usage records first; **Block**, notify, wait a grace period, then delete |
+| AP-77 | Building CMR inventory on the Power Apps admin cmdlets, the CoE kit or a service principal | The cmdlets and the CoE kit don't see CMR apps; the inventory API rejects service principals (403) | Delegated admin token on the resource query API, scheduled by an accountable admin |
+| AP-78 | Shipping tables or lists that an AI agent created (Dataverse MCP `create_table`, Copilot Studio Apps, Work IQ / Cowork lists) to production as-is | Dataverse MCP tables land **unmanaged in the Default solution with the default publisher prefix**; lists have ad-hoc names and owners. None of it is in source control | Treat them as a prototype: adopt into a solution (or recreate under the org publisher) and codify lists in `/provisioning` ([backend-provisioning](backend-provisioning.md) §10) |
+| AP-79 | Enabling Work IQ / MCP write tools tenant-wide "to see what happens" | Agents can then create lists, groups (sites) and plans on behalf of any licensed user, billed in Copilot Credits | Keep writes off by default; enable for named groups with a container-ownership policy and audit review |

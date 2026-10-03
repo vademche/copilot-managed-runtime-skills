@@ -77,3 +77,17 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | `share link create` → 403 `AppShareLinkForbiddenForViralSharing` | default sharing rule blocks links | share with groups instead, or admin changes rule |
 | `share list --access edit` → 401 | preview bug (observed 0.27.0) | use `ms app info` owners; retry later |
 | SP share fails | passed client ID | use SP **object ID** |
+
+## Inventory, admin APIs and MCP provisioning
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Admin can't see a citizen's app in `ms app list` | the list is RBAC-scoped (only apps shared with you) | inventory API / MAC → All apps ([inventory-orphans-adoption](inventory-orphans-adoption.md)) |
+| `Get-AdminPowerApp` / Power Apps admin API → `404 ApplicationNotFound` for a CMR app | that API covers canvas and code apps, not CMR apps | inventory API; no owner reassignment for CMR apps in preview |
+| Inventory query → `403` | service principal, or user lacks Power Platform admin / Global Reader | delegated admin token |
+| Inventory query returns 0 rows, `resultTruncated: 1` | `Options.Top` used | use a `take` clause and page with `skipToken` |
+| Tenant `/appframework/apps` or `/locate` → `403 InsufficientDelegatedPermissions` | those scopes are only granted to the `ms` CLI client | use `ms app info --app <app-id>` (resolves the environment itself) |
+| Calling a connector runtime URL directly → `400` "Bad authorization header scheme" | wrong token audience | token for `https://apihub.azure.com` |
+| Work IQ connection stays `Unauthenticated` | OAuth/SSO connector; consent is interactive | the user consents on first launch of the app |
+| Dataverse MCP `update_table` / `delete_table` → "staged metadata … still being processed" | async metadata processing after create | wait and retry; verify the final state, a timed-out call may still have succeeded |
+| MCP-created table is in the Default solution with a `cr<xxx>_` prefix | `create_table` has no solution/publisher parameter | adopt into a solution or recreate under the org publisher (AP-78) |

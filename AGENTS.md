@@ -14,7 +14,7 @@ A **plugin marketplace** (`marketplace.json`, `.claude-plugin/marketplace.json`)
 marketplace.json / .claude-plugin/marketplace.json   marketplace manifests
 plugins/copilot-managed-runtime/
   .claude-plugin/plugin.json, .plugin/plugin.json    plugin manifests (keep identical)
-  skills/<name>/SKILL.md                             16 skills
+  skills/<name>/SKILL.md                             17 skills
   agents/*.md                                        2 agents
   hooks/hooks.json + guard-generated.mjs             PreToolUse guard
   references/*.md                                    shared knowledge base

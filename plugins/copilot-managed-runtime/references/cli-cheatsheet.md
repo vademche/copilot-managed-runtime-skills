@@ -51,8 +51,11 @@ ms app create -n "Contoso Expenses" --repo https://github.com/contoso/expenses .
 ms app create -n "Contoso Expenses" --repo none ./app               # no Git; external artifact deploy (admin must allow)
 ms app create -n "Contoso Expenses" -t github:contoso/cmr-templates/react-fluent ./app  # org golden template
 ms app init -n "Existing SPA" --repo native                          # register an existing SPA in cwd
-ms app clone --app <app-id> ./app                                    # platform-managed Git only; needs edit access
+ms app clone --app <app-id> ./app                                    # platform-managed Git only; needs edit access; no -e needed
+ms app info --app <app-id> --json                                    # any app you can access, from outside its folder; resolves the environment
 ```
+
+The app ID is the last segment of the play URL. `ms app list` only shows apps shared with you; for a tenant-wide inventory see [inventory-orphans-adoption](inventory-orphans-adoption.md).
 
 `--repo` choice is **fixed at creation**. Choose deliberately (see `cmr-create-app`).
 
