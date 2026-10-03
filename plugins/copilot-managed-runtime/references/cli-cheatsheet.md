@@ -109,10 +109,22 @@ ms app list --permission edit|play --json     # {appId, displayName, lastDeploye
 ms app info --json                            # server-side state: owners, last deployed commit, live/preview URLs
 ms app get-settings [--json]
 ms app set-setting --show-header false        # writes appSettings.showHeader; applies on next dev/deploy (see note)
-ms app delete [--app <name>] [-e <env-id>] --force   # does NOT delete local code or the Git repo
+ms app delete [--app <name>] [-e <env-id>] --force   # soft-delete; does NOT delete local code, the Git repo, or your connections
 ```
 
 **`--show-header false` (verified, 0.27):** `showHeader` is the only app setting in the 0.27 schema. After deploy, the host header bar (home button + user avatar) disappears from the running app, but the host **loading screen** ("Fetching your app…") still shows it. Hiding it means your app must provide its own navigation, user identity (`getUser()`), and a way back to the app list. Commit `ms.config.json`, then deploy.
+
+## Cleaning up connections
+
+`ms app delete` and `ms app remove data-source` leave your **connections** in place, and the CLI has no command to delete them. Remove them in the maker portal (**Connections**), or call the Power Platform API with a token for `https://api.powerplatform.com` (scope `Connectivity.Connections.Write`):
+
+```bash
+GET    https://api.powerplatform.com/connectivity/environments/<env-id>/connections?api-version=1
+DELETE https://api.powerplatform.com/connectivity/environments/<env-id>/connectors/<connector-id>/connections/<connection-name>?api-version=1
+#      connector-id e.g. shared_sharepointonline; the flat .../connections/<name> DELETE route returns 404 RouteNotFound
+```
+
+Delete only connections you created for the app; other apps, flows or agents may share them.
 
 ## Telemetry (CLI)
 

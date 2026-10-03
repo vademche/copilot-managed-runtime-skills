@@ -18,7 +18,7 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | Exit code 2 listing datasets or tables | discovery flow needs `-d` / `-t` | rerun with the printed value |
 | "Skipped N of M actions due to policy" | blocked actions (HTTP, script, Custom API) | expected; use purpose-scoped actions |
 | Connector missing / `403` on add | not on env-group allow-list or blocked by ACP/DLP | `ms connector list --json` (check allowed flag); ask admin |
-| "Unable to determine the Dataverse organization URL" | env has no Dataverse | `--dataverse-environment-id <env-with-dataverse>`; delete the dangling connection |
+| "Unable to determine the Dataverse organization URL" | env has no Dataverse | `--dataverse-environment-id <env-with-dataverse>`; delete the dangling connection (portal or Connectivity API, see `cli-cheatsheet.md` → Cleaning up connections) |
 | Ambiguous connection error (non-interactive) | >1 connection for connector | pass `-c <connection-id>` or `--use-sso` |
 | `ms app create` fails: can't create | no routing rule / CLI creation disabled for your group | admin: routing + "Allow app creation with the CMR CLI" |
 | `ms app create --repo <url>` fails | repo not empty / not GHEC / mapping expired | empty GHEC repo; `ms git auth refresh --repo <url>`; `--force-reauth` |
