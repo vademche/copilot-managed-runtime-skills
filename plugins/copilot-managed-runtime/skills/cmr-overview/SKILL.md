@@ -47,6 +47,7 @@ If signals are mixed, stop and ask the user which product they target (AP-01).
 | Local dev loop, preview, build, deploy, play | `cmr-inner-loop` |
 | Pick & bind connectors (SharePoint, Excel, O365, Teams …) | `cmr-data-sources` |
 | Dataverse tables, cross-env binding, security | `cmr-dataverse` |
+| Create tables/lists/plans, managed vs unmanaged solutions, schema releases | `cmr-backend-provisioning` |
 | Work IQ / MCP servers from an app | `cmr-mcp-workiq` |
 | SDK usage, error handling, telemetry, App Insights | `cmr-sdk-patterns` |
 | CSP, XSS, secrets, threat model | `cmr-security-csp` |
@@ -68,4 +69,4 @@ Microsoft's own plugin (`microsoft-managed-apps@Managed-Apps`) covers the basic 
 4. Confirm with the user before `deploy`, `delete`, `share`/`unshare`, or anything that changes who can see data.
 5. Keep examples tenant-neutral (`contoso`, `<environment-id>`) (AP-73).
 
-References: [cli-cheatsheet](../../references/cli-cheatsheet.md) · [sdk-api](../../references/sdk-api.md) · [generated-code](../../references/generated-code.md) · [ms-config](../../references/ms-config.md) · [connectors-and-policy](../../references/connectors-and-policy.md) · [governance-quick-ref](../../references/governance-quick-ref.md) · [source-control](../../references/source-control.md) · [anti-patterns](../../references/anti-patterns.md) · [troubleshooting](../../references/troubleshooting.md)
+References: [cli-cheatsheet](../../references/cli-cheatsheet.md) · [sdk-api](../../references/sdk-api.md) · [generated-code](../../references/generated-code.md) · [ms-config](../../references/ms-config.md) · [connectors-and-policy](../../references/connectors-and-policy.md) · [governance-quick-ref](../../references/governance-quick-ref.md) · [source-control](../../references/source-control.md) · [backend-provisioning](../../references/backend-provisioning.md) · [solutions-and-alm](../../references/solutions-and-alm.md) · [anti-patterns](../../references/anti-patterns.md) · [troubleshooting](../../references/troubleshooting.md)

@@ -35,6 +35,13 @@ The default group is created on first app creation and immediately blocks the lo
 
 Take "full control" of a connector policy only if you'll own updates — Microsoft stops auto-updating it.
 
+**Ungrouped environments bypass the curated list.** The CMR connector rule is enforced through environment-group membership. In the lab, a Dataverse sandbox that wasn't in any group (and had no DLP) allowed every connector and action, including third-party connectors, SQL and SharePoint "Send an HTTP request", and a CMR app there could add them. Controls:
+- Put every environment that hosts CMR apps (team, test, prod) into a governed group.
+- Review environments with no group regularly (PPAC → Environments → *Environment group* column, or the BAP API with `$expand=properties.parentEnvironmentGroup`).
+- Keep a tenant-wide DLP as a backstop (AP-36).
+
+Also govern the **Dataverse MCP** schema tools (`create_table` / `update_table` / `delete_table`) and the MCP allowed-clients list. Schema should only change through solutions (AP-31, AP-37).
+
 ## 3. Maker → admin request templates
 
 - Connector: "Allow `<connector-id>` (actions: `<list>`) for env group `<group>` for app `<app-name>`; data classification: `<x>`; owner: `<group>`."
@@ -59,4 +66,4 @@ Take "full control" of a connector policy only if you'll own updates — Microso
 
 ## Anti-patterns
 
-AP-27, AP-46, AP-56, AP-60, AP-65. See [anti-patterns](../../references/anti-patterns.md).
+AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65. See [anti-patterns](../../references/anti-patterns.md).

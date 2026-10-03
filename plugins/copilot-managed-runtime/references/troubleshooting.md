@@ -47,6 +47,9 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | CI: `400 Principal not found` | used client ID where object ID is needed | Enterprise apps → **object ID** |
 | CI: `ms.config.json not found` | wrong `working-directory` | set the action input |
 | CI deploy "succeeds" but app unchanged | `cloud` input defaulted to `test` | `cloud: prod` |
+| Dataverse Web API `0x80060888` / column create fails right after table create | metadata not yet published or propagated | wait and retry with backoff; create columns after the table call returns (see [backend-provisioning](backend-provisioning.md)) |
+| `generated/` differs between stages after rebind | schema drift: table recreated by hand with a different prefix or choice values | ship the schema as a managed solution ([solutions-and-alm](solutions-and-alm.md)) |
+| A team env allows connectors that the dev env blocked | env isn't in a governed environment group, so the curated list doesn't apply | add the env to a governed group; keep a tenant DLP as the backstop |
 
 ## Runtime (browser)
 
@@ -64,6 +67,7 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | Data calls `success:false` with `403` | user lacks data-source permission or action blocked by updated policy | grant data permission; review policy change |
 | Duplicate records on load | effect ran twice | idempotent effects |
 | Work IQ returns string not JSON | SSE framing | parse SSE (`cmr-mcp-workiq`) |
+| Dataverse MCP returns `403` "not authorized to access MCP" | the client isn't in the environment's Dataverse MCP allowed clients | admin adds the client in PPAC → environment → Features → Dataverse MCP |
 | Local Play works, prod breaks | different CSP / origins between dev and host | test in preview URL before deploy |
 
 ## Sharing

@@ -40,6 +40,20 @@ Each entry: **what it looks like → why it hurts → do this instead.** IDs (`A
 | AP-29 | Parsing Work IQ MCP results as JSON directly | Response `data` is **SSE text** | Parse `event:`/`data:` lines then JSON-RPC (`cmr-mcp-workiq`) |
 | AP-30 | Non-idempotent effects (create-on-mount) | Effects ran twice in the lab even in production → duplicate records | Idempotent loads; creates only on explicit user action |
 
+## Backend provisioning & Dataverse solutions
+
+| ID | Anti-pattern | Why | Instead |
+|---|---|---|---|
+| AP-31 | Creating or altering Dataverse schema at runtime or from an agent (Dataverse MCP `create_table` / `update_table` / `delete_table`, Web API from the app) | Untracked unmanaged layers, no review, no rollback; prod drifts from dev | Schema only in the dev solution, promoted as managed ([solutions-and-alm](solutions-and-alm.md)); disable MCP schema tools for app scenarios |
+| AP-32 | App creating containers at runtime (Teams `CreateATeam`, Planner `CreateBucket`, Excel `CreateTable`, lists per user) | Sprawl, orphaned resources, ownership and retention gaps | The app creates content, never containers; containers come from `/provisioning` scripts |
+| AP-33 | Using Excel workbooks as the app database | No concurrency, locking, row security or scale; file renames break bindings | Dataverse, or a SharePoint list for simple team data |
+| AP-34 | Dataverse components outside a solution (Default solution, `cr123_` / `new_` prefixes) | Can't be shipped cleanly; collisions and mystery prefixes | Custom publisher prefix; `MSCRM.SolutionUniqueName` on every metadata call ([backend-provisioning](backend-provisioning.md)) |
+| AP-35 | Over-privileged provisioning identity (Global Admin, `Sites.FullControl.All`, personal credentials in CI) | Blast radius; unaudited; breaks when the person leaves | `Sites.Selected` plus a per-environment application user with a custom role |
+| AP-36 | CMR-enabled environments outside any environment group | The curated connector allow-list is enforced through the group rule. In the lab, an ungrouped sandbox allowed every connector and action (third-party connectors, SQL, HTTP) | Put every environment that hosts CMR apps in a governed group; audit ungrouped environments; keep tenant DLP as a backstop |
+| AP-37 | Importing unmanaged solutions into test/prod, or hot-fixing schema in prod | Unremovable layers, no clean upgrade or uninstall, drift | Managed downstream; "Block unmanaged customizations" in prod |
+| AP-38 | Recreating tables by hand in each environment | Different prefixes, option values and entity sets → divergent codegen, broken choice maps | One solution, imported managed; `generated/` diff must be empty after rebinding |
+| AP-39 | Expecting the CMR app inside a solution, or confusing CMR "managed projects" with managed solutions | CMR apps aren't solution components; Pipelines won't move them | Two tracks: solution import for schema, `ms app deploy` for the app |
+
 ## Security & CSP
 
 | ID | Anti-pattern | Why | Instead |

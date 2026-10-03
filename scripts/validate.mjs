@@ -120,7 +120,7 @@ for (const f of md) {
 const textExt = /\.(md|json|mjs|js|ts|tsx|ya?ml|ps1|sh|svg|txt)$/i;
 const guid = /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi;
 const allowedGuid = /^0{8}-0{4}-0{4}-0{4}-0{12}$|^1{8}-1{4}-1{4}-1{4}-1{12}$/;
-const tenantHost = /\b([a-z0-9-]+)\.(onmicrosoft\.com|crm\d*\.dynamics\.com|sharepoint\.com)\b/gi;
+const tenantHost = /\b([a-z0-9-]+)\.(?:api\.)?(onmicrosoft\.com|crm\d*\.dynamics\.com|sharepoint\.com)\b/gi;
 const allowedHostPrefix = /^(contoso|fabrikam|example|your-?tenant|yourorg|org|tenant|\*)/i;
 let deny = [];
 const denyFile = path.join(root, '.anonymise-denylist');

@@ -14,7 +14,7 @@ CMR runs single-page apps (React/Vite/TypeScript or any framework) on a Microsof
 - **Stay inside policy.** That means connector and MCP allow-lists, sharing limits, CSP, and the environment-group routing set by admins.
 - **Keep generated code generated.** Wrap `generated/services/*` behind `src/data/*`; never hand-edit them.
 - **Hand over cleanly.** A citizen maker starts an app in Copilot Studio or Cowork; a pro developer takes over the source and can give it back.
-- **Avoid the 44 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
+- **Avoid the 58 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
 
 These skills package that knowledge so a coding agent can follow it step by step.
 
@@ -22,8 +22,8 @@ These skills package that knowledge so a coding agent can follow it step by step
 
 ```
 plugins/copilot-managed-runtime/
-├── skills/        16 skills (cmr-*) — see table below
-├── references/    8 shared reference docs the skills link to
+├── skills/        17 skills (cmr-*) — see table below
+├── references/    11 shared reference docs the skills link to
 ├── agents/        cmr-architect, cmr-reviewer
 └── hooks/         PreToolUse guard that blocks edits to generated code
 ```
@@ -38,6 +38,7 @@ plugins/copilot-managed-runtime/
 | `cmr-inner-loop` | Go dev → pack → push → build → preview → deploy → play, and roll back |
 | `cmr-data-sources` | Bind connectors (SharePoint, Office 365, SQL…) and wrap generated services |
 | `cmr-dataverse` | Work with Dataverse tables, cross-environment binding and security roles |
+| `cmr-backend-provisioning` | Script Dataverse tables (in solutions), SharePoint sites/lists and Planner plans; managed vs unmanaged solutions alongside the app's Git repo |
 | `cmr-mcp-workiq` | Call MCP servers (Work IQ and others), including JSON-RPC and SSE parsing |
 | `cmr-sdk-patterns` | Use `@microsoft/managed-apps` idiomatically: context, results, telemetry |
 | `cmr-security-csp` | Live within the CSP and avoid XSS and secret leaks |

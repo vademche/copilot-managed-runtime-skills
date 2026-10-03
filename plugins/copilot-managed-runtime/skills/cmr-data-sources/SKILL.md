@@ -18,7 +18,7 @@ allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 7. Existing line-of-business DB → SQL Server connector (gateway/firewall) — only if allowed in the env group.
 8. **Excel as a database → avoid** for multi-user writes (locking, no row security).
 
-Check what is allowed first: the env group's connector + MCP allow list. See [connectors-and-policy](../../references/connectors-and-policy.md).
+Check what is allowed first: the env group's connector + MCP allow list (`ms connector list-actions --connector <id>` in the **target** environment; environments outside any group may allow far more than production will). See [connectors-and-policy](../../references/connectors-and-policy.md).
 
 ## 2. Discover → bind (the exit-2 loop)
 
@@ -80,7 +80,9 @@ Known codegen gap: tabular `delete()` returns `Promise<void>` and **swallows fai
 
 ## 5. SharePoint specifics
 
-- Column internal names differ from display names (`Title`, `field_1`) — read the generated model.
+- Column internal names differ from display names (`Title`, `field_1`). Codegen uses the internal name, so a column shown as *Status* may be `RequestStatus` in code. Read the generated model.
+- Choice / person columns are written via `'<Col>#Id'` / `'<Col>#Claims'` and read as `*Value` objects.
+- Creating the list or library itself is a design-time job (Graph script). See `cmr-backend-provisioning`. The app can't create lists (HTTP request action is blocked).
 - Use `select` and `top`; paginate with `skipToken`. Index filtered columns on lists >5k items.
 - Document library rows are metadata; file content needs the action connector operations.
 - Permissions are SharePoint's — the app cannot widen them (good; don't try).

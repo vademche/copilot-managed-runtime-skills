@@ -48,4 +48,6 @@ There are three delivery models:
 
 CI signs in as a service principal. Gate prod behind an environment approval.
 
-Skill: `cmr-alm-cicd`.
+CMR apps are not solution components, so Git is their source of truth. If the app binds to Dataverse tables, ship that schema as a **managed solution** from the same repo and import it *before* you deploy the app commit. Script SharePoint lists and Planner plans the same way; the app creates content, not containers.
+
+Skills: `cmr-alm-cicd`, `cmr-backend-provisioning`.

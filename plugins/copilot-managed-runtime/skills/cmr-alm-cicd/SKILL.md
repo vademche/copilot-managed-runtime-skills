@@ -17,6 +17,8 @@ allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 
 Model B prerequisite: the admin enables **`AllowExternalArtifactDeployment`** on the target environment; otherwise deploy fails with "External artifact deployment is not enabled for this environment".
 
+**Dataverse-backed apps add a second track.** CMR apps aren't solution components, so the Dataverse schema they bind to ships as a **managed solution**. Its unpacked source lives in the same repo (`/dataverse/<Solution>`). Each stage runs: import the managed solution, then deploy the same app SHA. Power Platform Pipelines can move the solution but not the app. Details and a workflow sketch: [solutions-and-alm](../../references/solutions-and-alm.md), skill `cmr-backend-provisioning`.
+
 ## 2. Environment separation
 
 Without preview ALM, **one app = one set of bindings**. For real dev/test/prod use **separate apps** (e.g. "Expenses (Test)" and "Expenses") built from the same repo/commit, each bound to its own data (AP-52). Promote by deploying the **same SHA** to each. Keep binding differences in `ms.config.json` per app directory/branch and document them.
@@ -95,4 +97,4 @@ You own it: build from a clean checkout, `npm ci` with lockfile, SBOM (`.ms/pack
 
 ## Anti-patterns
 
-AP-50 … AP-58, AP-12, AP-13. See [anti-patterns](../../references/anti-patterns.md) · [cli-cheatsheet](../../references/cli-cheatsheet.md) · [source-control](../../references/source-control.md).
+AP-50 … AP-58, AP-12, AP-13, AP-37 … AP-39. See [anti-patterns](../../references/anti-patterns.md) · [cli-cheatsheet](../../references/cli-cheatsheet.md) · [source-control](../../references/source-control.md) · [solutions-and-alm](../../references/solutions-and-alm.md).

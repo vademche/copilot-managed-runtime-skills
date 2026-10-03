@@ -150,6 +150,18 @@ MS_CLI_ALM=true ms app add data-source --deployment <name> --for <data-source> .
 MS_CLI_ALM=true ms app deploy --deployment <name>
 ```
 
+## Dataverse schema alongside the app (`pac`)
+
+CMR apps are not solution components, but the tables they bind to are. Keep the schema in an **unmanaged solution in dev** and ship it **managed** (see [solutions-and-alm](solutions-and-alm.md)).
+
+```bash
+pac solution clone  --name ContosoFieldRequests --outputDirectory dataverse          # first time: .cdsproj + src/
+pac solution sync   --solution-folder dataverse/ContosoFieldRequests                  # pull later dev changes
+pac solution pack   --zipfile out/ContosoFieldRequests_managed.zip --folder dataverse/ContosoFieldRequests/src --packagetype Managed
+pac solution import --path out/ContosoFieldRequests_managed.zip --stage-and-upgrade   # target env, before `ms app deploy`
+ms app refresh data-source -n <table>                                                 # after schema changes; expect a clean generated/ diff
+```
+
 ## Exit codes worth knowing
 
 | Code | Meaning in practice |

@@ -14,6 +14,7 @@ Skills, agents and hooks that teach a coding agent to build, govern and operate 
 | [`cmr-inner-loop`](skills/cmr-inner-loop/SKILL.md) | Local dev → pack → push → cloud build → preview → deploy → play |
 | [`cmr-data-sources`](skills/cmr-data-sources/SKILL.md) | Bind connector data sources (SharePoint, Office 365, SQL…) and wrap generated services |
 | [`cmr-dataverse`](skills/cmr-dataverse/SKILL.md) | Use Dataverse tables, including cross-environment binding and security roles |
+| [`cmr-backend-provisioning`](skills/cmr-backend-provisioning/SKILL.md) | Provision Dataverse (in solutions), SharePoint and Planner backends; managed vs unmanaged solutions and schema-first releases |
 | [`cmr-mcp-workiq`](skills/cmr-mcp-workiq/SKILL.md) | Call MCP servers (Work IQ, Fabric, Learn…) incl. JSON-RPC + SSE parsing |
 | [`cmr-sdk-patterns`](skills/cmr-sdk-patterns/SKILL.md) | Use the SDK idiomatically: context, results, React patterns, telemetry |
 | [`cmr-security-csp`](skills/cmr-security-csp/SKILL.md) | Live within the default CSP, request changes, avoid XSS/secrets leaks |
@@ -40,7 +41,7 @@ Skills, agents and hooks that teach a coding agent to build, govern and operate 
 
 ## References
 
-Shared knowledge the skills link to: [CLI cheatsheet](references/cli-cheatsheet.md) · [SDK API](references/sdk-api.md) · [Generated code](references/generated-code.md) · [Connectors & policy](references/connectors-and-policy.md) · [`ms.config.json`](references/ms-config.md) · [Governance quick ref](references/governance-quick-ref.md) · [Source control](references/source-control.md) · [Anti-patterns](references/anti-patterns.md) · [Troubleshooting](references/troubleshooting.md)
+Shared knowledge the skills link to: [CLI cheatsheet](references/cli-cheatsheet.md) · [SDK API](references/sdk-api.md) · [Generated code](references/generated-code.md) · [Connectors & policy](references/connectors-and-policy.md) · [`ms.config.json`](references/ms-config.md) · [Governance quick ref](references/governance-quick-ref.md) · [Source control](references/source-control.md) · [Backend provisioning](references/backend-provisioning.md) · [Solutions & ALM](references/solutions-and-alm.md) · [Anti-patterns](references/anti-patterns.md) · [Troubleshooting](references/troubleshooting.md)
 
 ## Works well with
 

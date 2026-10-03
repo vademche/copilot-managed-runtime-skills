@@ -17,7 +17,15 @@ ms app add data-source --connector shared_commondataserviceforapps --as table -c
 # exit 2 → lists the missing choices (connection / tables). Loop until success.
 ```
 
-Prefer a shared, ALM-managed environment (solution-based tables) over the maker's personal one for any data that must outlive the maker.
+If the app lives in an environment that **has** Dataverse, bind in the same environment and omit `--dataverse-environment-id`:
+
+```bash
+ms app add data-source --connector commondataserviceforapps --as table -t contoso_fieldrequest --use-sso --non-interactive --json
+```
+
+Prefer a shared, ALM-managed environment (solution-based tables) over the maker's personal one for any data that must outlive the maker. Creating the tables themselves (publisher, solution, Web API scripts) is covered in `cmr-backend-provisioning`.
+
+The binding is keyed to the **org API URL** and `dataverseTables{ environmentId, logicalName, entitySetName }` in `ms.config.json`. Generated code contains no environment values, so with an identical (managed-solution) schema in every stage, rebinding per stage leaves `generated/` unchanged.
 
 ## 2. Generated service shape (verified)
 
@@ -51,7 +59,7 @@ Always `$select` columns; never load whole tables into memory for client-side fi
 
 ## 4. Data-shape rules
 
-- **Choices**: integer values; map labels in code or read metadata once and cache.
+- **Choices**: integer values. Codegen emits a typed map per local choice (`export const Contoso_fieldrequestscontoso_status = { 100000000: 'New', … } as const`) and a read-only `<column>name` label field. Use the map; don't hard-code numbers.
 - **Lookups**: write with `"<nav>@odata.bind": "/<entityset>(<id>)"`; read with `$expand` or `_<lookup>_value`.
 - **Dates**: UTC ISO strings; format in the UI.
 - Filter strings: escape single quotes (`'` → `''`) in user input (injection).
@@ -67,8 +75,8 @@ Access is evaluated as **the signed-in user** — Dataverse security roles, busi
 
 ## 6. Schema changes
 
-Tables are owned by the Dataverse environment's ALM (solutions). After a schema change: `ms app refresh data-source -n <name>`, review the `generated/` diff, commit.
+Tables are owned by the Dataverse environment's ALM (solutions). Keep the solution unmanaged in dev and **managed** downstream, with its unpacked source in the same repo as the app ([solutions-and-alm](../../references/solutions-and-alm.md)). After a schema change: `ms app refresh data-source -n <name>`, review the `generated/` diff, commit. Never let the app, an agent or the Dataverse MCP `create_table` / `update_table` tools change schema (AP-31).
 
 ## Anti-patterns
 
-AP-15, AP-21, AP-24, AP-25, AP-26, AP-28. See [anti-patterns](../../references/anti-patterns.md) · [generated-code](../../references/generated-code.md).
+AP-15, AP-21, AP-24, AP-25, AP-26, AP-28, AP-31, AP-34, AP-37, AP-38. See [anti-patterns](../../references/anti-patterns.md) · [generated-code](../../references/generated-code.md).

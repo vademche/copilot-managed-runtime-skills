@@ -2,7 +2,7 @@
 
 ## What is allowed by default
 
-Governance is **initialised on the first app creation in the tenant**. In the lab tenant, ~1 280 of ~1 300 connectors became blocked, leaving the allow-list below. The admin can widen or narrow it (see `cmr-governance-admin`).
+Governance is **initialised on the first app creation in the tenant**. The rule lives on the **default CMR environment group**, so it covers environments in that group (personal developer environments from routing), not every environment in the tenant (see "Where the curated list applies" below). In the lab tenant, ~1 280 of ~1 300 connectors became blocked in that group, leaving the allow-list below. The admin can widen or narrow it (see `cmr-governance-admin`).
 
 ### 18 first-party connectors (Entra ID-only)
 
@@ -57,6 +57,29 @@ Third-party SaaS / your own API / SQL / Azure Function?       → Blocked by def
 5. **Data-source security** (Dataverse roles, SharePoint permissions) — evaluated as the signed-in user.
 
 Policy changes can **break a deployed app** (connection fails at launch). Keep the data layer behind your own service module so a swap is local.
+
+## Where the curated list applies, and where it doesn't
+
+The curated allow-list above is **not tenant-wide**. It's a rule on the **environment group**, which by default is the auto-created group that receives the personal developer environments makers get through routing. Lab comparison (`ms connector list-actions` in each environment):
+
+| Environment | Group | Third-party connector (e.g. X) | SQL / Blob | SharePoint "Send an HTTP request" |
+|---|---|---|---|---|
+| Personal dev env (routing) | default CMR group | **Block** | **Block** | **Block** |
+| Team sandbox with Dataverse, no group, no DLP | none | Allow, and `ms app add data-source` succeeded | Allow (only an interactive connection was missing) | **Allow** |
+
+So "not approved but allowed" components come from three places:
+1. Environments **outside** any environment group. Only tenant/environment DLP applies there, and with no DLP, nothing is restricted.
+2. Groups whose admin added connectors or took **full control** of the rule.
+3. Existing groups without an ACP, where classic DLP decides. The docs note that the MAC view may then misleadingly say "no connectors allowed".
+
+For makers: before choosing a non-curated connector, check the target environment with `ms connector list-actions --connector <id>`. An app that works in an ungrouped sandbox can break when it's moved into a governed group. `ms connector list` always shows the whole catalogue regardless of policy, so it isn't a policy check.
+
+For admins: put every environment that hosts CMR apps in a group with the CMR rule, audit ungrouped environments regularly, and keep a tenant-wide DLP as a backstop (AP-36).
+
+## Runtime capabilities that need governance attention
+
+- **Dataverse MCP server** (allowed by default) exposes `create_table`, `update_table`, `delete_table` alongside record CRUD and `read_query`. For apps, schema changes belong in solutions (AP-31). Restrict schema tools in the MCP/connector rule where possible. Calling the environment's `/api/mcp` endpoint directly also requires the client app to be on the environment's **MCP allowed clients** list; otherwise you get 403 "not authorized to access MCP".
+- **Container-creating actions** that stay allowed: Teams `CreateATeam` / `CreateChannel`, Planner `CreateBucket`, Excel `CreateTable`. Provision containers at design time instead (AP-32, [backend-provisioning](backend-provisioning.md)).
 
 ## Connection rules of thumb
 

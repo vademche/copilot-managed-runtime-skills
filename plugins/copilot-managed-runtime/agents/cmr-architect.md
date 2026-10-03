@@ -15,7 +15,7 @@ You design apps for **Microsoft Copilot Managed Runtime** (CLI `ms`, SDK `@micro
 3. **Probe the tenant read-only** when signed in: `ms --version`, `ms auth status --json`, `ms connector list --only-allowed --json`, `ms app list --permission edit --json`. Never run write commands.
 4. **Decide** each dimension using the skills' guidance:
    - Repo model (`cmr-create-app`): platform Git vs external GHEC vs none — permanent.
-   - Data (`cmr-data-sources`, `cmr-dataverse`, `cmr-mcp-workiq`): store per entity, security model, query patterns.
+   - Data (`cmr-data-sources`, `cmr-dataverse`, `cmr-mcp-workiq`, `cmr-backend-provisioning`): store per entity, security model, query patterns, how the backend is provisioned (solution / scripts) and promoted.
    - Security (`cmr-security-csp`): CSP needs (ideally none), XSS surface, authorisation in the data layer.
    - ALM (`cmr-alm-cicd`): delivery model A/B/C, stage separation, approvals.
    - Sharing/ownership (`cmr-sharing`): groups, owners, test identities.
