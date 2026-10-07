@@ -22,6 +22,7 @@ Prices and rules are **preview** and change — always point users to the curren
 ## 2. Credit consumption (Copilot Credits path)
 
 - Charged on **app launch** and **0.1 credits per API call** (connector/data operation).
+- Custom and third-party connectors add no separate licence beyond Power Apps Premium / Copilot Credits; their calls are metered like any connector call (inferred, not documented for CMR).
 - Preview: users without entitlement get a warning and a **grace window (≈20 operations or 5 minutes)**, then are blocked.
 - Admins: MAC → Copilot → **Cost management** (P3 pre-purchase, pay-as-you-go, capacity packs; per-service spending policies).
 

@@ -62,9 +62,11 @@ The app ID is the last segment of the play URL. `ms app list` only shows apps sh
 ## Connectors and data sources
 
 ```bash
-ms connector list --json                         # 0.27.0: includes blocked; use --only-allowed to filter (docs say --include-blocked)
+ms connector list --json                         # 0.27.0: includes blocked (`isBlocked`); --only-allowed filters; --search <text> (docs say --include-blocked)
 ms connector list-actions --connector office365users --json
 ms app add data-source --connector office365users --as action --use-sso --non-interactive
+ms app add data-source --connector "<custom connector name>" --as action --non-interactive   # custom connectors bind like any action connector (ms can't create them)
+ms app add data-source --connector <id> --as action --skip-codegen --non-interactive         # no generated service (e.g. broken OpenAPI); wrap executeAsync yourself
 ms app add data-source --connector sharepointonline --as table -c <conn-id> -d <site-url> -t <list-guid> --non-interactive
 ms app add data-source --connector commondataserviceforapps --as table -c <conn-id> \
    --dataverse-environment-id <dataverse-env-id> -t account --non-interactive
@@ -75,6 +77,8 @@ ms app info                                      # config + bound resources (`ms
 
 Discovery pattern for tabular connectors (each step exits **2** and prints the next choice):
 `--as table` → lists **datasets** → add `-d` → lists **tables** → add `-t` → success.
+
+Custom connectors: delete `properties.apiDefinitions` from `.ms/schemas/<connector>/*.Schema.json` before committing (SAS URLs → `SecretsScan` push rejection). The add-time policy check is advisory; `ms app deploy` is where ACP/DLP is enforced ([connectors-and-policy](connectors-and-policy.md)).
 
 ## Develop
 

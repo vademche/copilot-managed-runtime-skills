@@ -17,7 +17,11 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | `ms` hangs in an agent/CI shell | interactive prompt / device code | add `--non-interactive`; use SP env vars in CI |
 | Exit code 2 listing datasets or tables | discovery flow needs `-d` / `-t` | rerun with the printed value |
 | "Skipped N of M actions due to policy" | blocked actions (HTTP, script, Custom API) | expected; use purpose-scoped actions |
-| Connector missing / `403` on add | not on env-group allow-list or blocked by ACP/DLP | `ms connector list --json` (check allowed flag); ask admin |
+| Connector missing / `403` on add | not on env-group allow-list or blocked by ACP/DLP | `ms connector list --search <name> --json` (check `isBlocked`); ask admin |
+| Exit 2: `Connector '<name>' is blocked by your organization's connector policy.` | custom, third-party or independent-publisher connector not on the group's ACP list (the default) | curated alternative, or admin request ([connectors-and-policy](connectors-and-policy.md) → Custom and non-curated connectors); after an allow, wait ~1 min and retry |
+| `Could not verify connector policy; proceeding without enforcement.` | CLI policy lookup failed; the add-time check is fail-open | deploy still enforces policy; check `ms auth status` |
+| `git push` rejected: `SecretsScan: … Shared Access Signature … in .ms/schemas/…` | custom-connector schema embeds SAS swagger URLs (`properties.apiDefinitions`) | delete `properties.apiDefinitions` from that schema file, amend, push (AP-82) |
+| Policy API `403 MicrosoftManagedRuleSetEditNotAllowed` | the group's connector rule is Microsoft-managed | MAC *Edit this policy* (full control) first, or use a dedicated group (AP-83) |
 | "Unable to determine the Dataverse organization URL" | env has no Dataverse | `--dataverse-environment-id <env-with-dataverse>`; delete the dangling connection (portal or Connectivity API, see `cli-cheatsheet.md` → Cleaning up connections) |
 | Ambiguous connection error (non-interactive) | >1 connection for connector | pass `-c <connection-id>` or `--use-sso` |
 | `ms app create` fails: can't create | no routing rule / CLI creation disabled for your group | admin: routing + "Allow app creation with the CMR CLI" |
@@ -42,7 +46,9 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | Deploy warns about uncommitted changes / local ahead | cloud builds from the **pushed commit** | commit + push; `--force` only for throwaway prototypes |
 | Build failed | TS errors, missing deps, wrong `buildPath` | `ms app pack` locally first; `build-status --show-log` |
 | Live app didn't change after push | live only changes on deploy | `ms app deploy`; check `ms app info` last deployed commit |
-| `External artifact deployment is disabled` | `repoType none` / `--artifact` without admin opt-in | admin enables external artifacts |
+| `External artifact deployment is disabled` / `…is not enabled for this environment… AllowExternalArtifactDeployment` | `repoType none` / `--artifact` without admin opt-in | admin enables external artifacts |
+| Deploy `403 AcpDlpPolicyEvaluation`: "…cannot be saved because one or more connectors it uses … are blocked by Advanced Connector Policy (ACP) or Data Policies (DLP)…" | `ViolationType: BlockedConnector` = connector not on the group's ACP list (also after an admin removed it); `BusinessAndNonBusinessConnector` = classic DLP data-group mix, not caught at add time | remove the data source, or get the policy changed; never hand-edit around it (AP-81) |
+| `Build failed: BuildFailed: Command exited with code 2: npm run build` after adding a non-curated connector | its OpenAPI definition generated TypeScript that doesn't compile (TS2300 / TS2304 / TS1016) | `npm run build` locally; re-add with `--skip-codegen` and wrap `executeAsync`; or drop the broken generated files (AP-85) |
 | CI: `Repositories.MicrosoftApps.Deploy.Write` forbidden | SP lacks env role | Dataverse env: app user with System Administrator/Customizer; else EnvironmentAdmin via BAP role assignment |
 | CI: `400 Principal not found` | used client ID where object ID is needed | Enterprise apps → **object ID** |
 | CI: `ms.config.json not found` | wrong `working-directory` | set the action input |

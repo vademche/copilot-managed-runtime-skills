@@ -24,7 +24,7 @@ Skill: `cmr-inner-loop`.
 
 ![Governance](images/cmr-governance.svg)
 
-Admins attach makers' developer environments to an **environment group**. The group's rules control which connectors and MCP servers are allowed, how widely apps can be shared, the CSP, and where new apps are routed. Data policies (ACP/DLP) are applied at the connector layer, at runtime. Agents should read the policy, design within it, and **never try to get around it**.
+Admins attach makers' developer environments to an **environment group**. The group's rules control which connectors and MCP servers are allowed, how widely apps can be shared, the CSP, and where new apps are routed. Data policies (ACP/DLP) are checked when a maker adds a data source and enforced by the service on every deploy. Custom and third-party connectors are blocked in the default group. Agents should read the policy, design within it, and **never try to get around it**.
 
 Skills: `cmr-governance-admin`, `cmr-sharing`, `cmr-licensing-cost`.
 

@@ -28,6 +28,7 @@ Read: `ms.config.json`, `package.json`, `src/**`, `generated/index.ts`, `generat
 | Tooling | CLI + vite plugin pinned | `"@microsoft/managed-apps-cli": "^` | AP-13 |
 | Imports | subpaths only; Dataverse default imports | `from '@microsoft/managed-apps'$`, `import { .* } from .*generated/services/.*Service'` | AP-14, AP-15 |
 | Network | no external fetch/axios | `fetch\(`, `axios`, `XMLHttpRequest`, `new WebSocket` | AP-20 |
+| Connectors | non-curated connectors allowed in the target group; no SAS in schemas; generated code builds | `"apiDefinitions"` in `.ms/schemas/`; compare `ms app info --json` with `ms connector list --only-allowed` in the target env | AP-81–AP-85 |
 | Results | every call checks `success` | calls without `.success` / `unwrap` | AP-21, AP-22 |
 | Queries | `select`/`top`/paging; no N+1 | `getAll\(\)`, `ListRecords\(\{\}\)`, calls inside `.map(` | AP-24, AP-26 |
 | AuthZ | no UI-only authorisation | `objectId ===`, `isAdmin` in components | AP-25 |

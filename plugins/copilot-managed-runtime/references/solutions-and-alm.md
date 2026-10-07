@@ -20,6 +20,8 @@ The CMR docs say "the Git repository is the single source of truth" and never me
 
 **Contrast: Power Apps code apps** *are* solution-aware. They support `pa app push --solution-id`, preferred-solution auto-selection, connection references and environment variables in data sources, and Power Platform Pipelines. They don't support Git. Don't carry that model over to CMR (AP-01). The CMR config schema inherits fields such as `xrmConnectionReferenceLogicalName` and `datasetOverride.environmentVariableName` from shared code, but **no `ms` command sets them**. Don't hand-edit them in (AP-10).
 
+**Custom connectors across environments.** A custom connector *can* travel in a solution, but the CMR app binds to the connector's id, and that id is environment-specific when the connector is created per environment (lab). Ship the connector in the managed solution, then rebind the app in each environment with `ms app add data-source` (AP-84). Remember the connector rule of the target group: see [connectors-and-policy](connectors-and-policy.md) → *Custom and non-curated connectors*.
+
 ## 2. Managed vs unmanaged: what each is for
 
 | | Unmanaged | Managed |

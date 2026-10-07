@@ -1,6 +1,6 @@
 ---
 name: cmr-data-sources
-description: Choose, bind, refresh and remove connector data sources (SharePoint lists/libraries, Excel, Office 365 Users/Outlook/Teams, SQL, etc.) in a Copilot Managed Runtime app, and wrap the generated services safely. USE WHEN adding a connector, binding a SharePoint list or Excel table, picking a data store, or seeing exit code 2 from `ms app add data-source`. DO NOT USE WHEN the data source is Dataverse (use cmr-dataverse) or an MCP server such as Work IQ (use cmr-mcp-workiq).
+description: Choose, bind, refresh and remove connector data sources (SharePoint lists/libraries, Excel, Office 365 Users/Outlook/Teams, SQL, custom or third-party connectors) in a Copilot Managed Runtime app, and wrap the generated services safely. USE WHEN adding a connector, binding a SharePoint list or Excel table, picking a data store, or seeing exit code 2 from `ms app add data-source`. DO NOT USE WHEN the data source is Dataverse (use cmr-dataverse) or an MCP server such as Work IQ (use cmr-mcp-workiq).
 user-invocable: true
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 ---
@@ -15,7 +15,7 @@ allowed-tools: Read, Edit, Write, Bash, Grep, Glob, AskUserQuestion
 4. People/profile/org chart → **Office 365 Users** (action connector).
 5. Mail/calendar/Teams posts → **Office 365 Outlook / Teams** (action connectors; mind blocked actions).
 6. Natural-language over M365 → **Work IQ MCP** (`cmr-mcp-workiq`).
-7. Existing line-of-business DB → SQL Server connector (gateway/firewall) — only if allowed in the env group.
+7. Existing line-of-business DB or API, third-party SaaS → SQL Server, third-party or custom connector. These are **blocked in the default CMR group**; see §6.
 8. **Excel as a database → avoid** for multi-user writes (locking, no row security).
 
 Check what is allowed first: the env group's connector + MCP allow list (`ms connector list-actions --connector <id>` in the **target** environment; environments outside any group may allow far more than production will). See [connectors-and-policy](../../references/connectors-and-policy.md).
@@ -87,6 +87,16 @@ Known codegen gap: tabular `delete()` returns `Promise<void>` and **swallows fai
 - Document library rows are metadata; file content needs the action connector operations.
 - Permissions are SharePoint's — the app cannot widen them (good; don't try).
 
+## 6. Custom and non-curated connectors
+
+Custom (OpenAPI / API Management), certified third-party, independent-publisher, non-Entra-auth and gateway connectors are outside the curated list. Full matrix and error strings: [connectors-and-policy](../../references/connectors-and-policy.md) → *Custom and non-curated connectors*.
+
+1. **Check the target environment first.** Run `ms connector list --search <name> --json`. If it shows `isBlocked: true`, or `ms app add data-source` exits 2 with "…is blocked by your organization's connector policy.", stop. Offer a curated alternative, or send the admin request from `cmr-governance-admin` §3. Don't hand-edit the binding in: deploy re-checks ACP and DLP and fails with 403 `AcpDlpPolicyEvaluation` (AP-81).
+2. **No `ms` command creates a connector.** The connector must already exist in the environment (maker portal, `pac connector create`, or a solution). Then bind it with `ms app add data-source --connector "<name>" --as action --non-interactive`.
+3. **Before committing a custom connector**, remove `properties.apiDefinitions` from `.ms/schemas/<connector>/*.Schema.json`. It holds SAS URLs and the platform Git rejects the push with `SecretsScan` (AP-82). Repeat after every add or refresh.
+4. **Build locally** (`npm run build`) right after adding. Non-curated OpenAPI definitions can generate TypeScript that doesn't compile. If so, re-add with `--skip-codegen` and wrap the few operations you need with `getClient(dataSources).executeAsync({ connectorOperation: { tableName, operationName, parameters } })` in `src/data/*` (AP-85).
+5. Custom-connector ids are environment-specific: rebind in each stage (AP-84). Never fall back to `fetch` plus a CSP exception (AP-20).
+
 ## Anti-patterns
 
-AP-11, AP-12, AP-20, AP-21, AP-22, AP-23, AP-24, AP-26, AP-27. See [anti-patterns](../../references/anti-patterns.md).
+AP-11, AP-12, AP-20, AP-21, AP-22, AP-23, AP-24, AP-26, AP-27, AP-81, AP-82, AP-84, AP-85. See [anti-patterns](../../references/anti-patterns.md).

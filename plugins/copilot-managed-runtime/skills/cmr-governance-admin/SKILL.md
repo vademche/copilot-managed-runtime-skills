@@ -40,11 +40,18 @@ Take "full control" of a connector policy only if you'll own updates — Microso
 - Review environments with no group regularly (PPAC → Environments → *Environment group* column, or the BAP API with `$expand=properties.parentEnvironmentGroup`).
 - Keep a tenant-wide DLP as a backstop (AP-36).
 
+**Custom and non-curated connectors** (custom/OpenAPI, third-party, independent publisher, non-Entra auth, gateway). Detail: [connectors-and-policy](../../references/connectors-and-policy.md) → *Custom and non-curated connectors*.
+- The default group's rule is Microsoft-managed. Edits fail with 403 `MicrosoftManagedRuleSetEditNotAllowed` until you take **full control**. Prefer a **dedicated group** for the requesting team over widening the default group (AP-83).
+- **Third-party and independent-publisher connectors:** add them under full control. They're usable about a minute later (lab).
+- **Custom connectors:** the ACP docs say they aren't supported yet. In the lab the policy API accepted one anyway (undocumented). The documented route is classic DLP: a group without a connector ACP, "Advanced connector policies only" **off**, and a DLP policy with custom-connector URL patterns limited to your API hosts.
+- **Enforcement point:** policy is enforced on every `ms app deploy`. Removing a connector, or a DLP business/non-business mix, fails the next deploy with 403 `AcpDlpPolicyEvaluation`. Check which apps use a connector (MAC → Apps → *app* → Data & tools) before removing it.
+- Save the policy JSON before taking control. Reverting to Microsoft-managed worked through the API in the lab but isn't documented. Rule changes appear in Purview as `UpdateRuleBasedPolicyOperation` / `UpdateRuleSetOperation`.
+
 Also govern the **Dataverse MCP** schema tools (`create_table` / `update_table` / `delete_table`) and the MCP allowed-clients list. Schema should only change through solutions (AP-31, AP-37). The same applies to **Work IQ write tools**: they can create SharePoint lists, columns, Microsoft 365 groups (and so team sites) and Planner plans. They're off by default; enable them only for named groups (AP-79). Containers an AI created are prototypes until a pro-dev adopts them (AP-78).
 
 ## 3. Maker → admin request templates
 
-- Connector: "Allow `<connector-id>` (actions: `<list>`) for env group `<group>` for app `<app-name>`; data classification: `<x>`; owner: `<group>`."
+- Connector: "Allow `<connector-id>` (actions: `<list>`) for env group `<group>` for app `<app-name>`; data classification: `<x>`; owner: `<group>`." For a custom connector, add: OpenAPI host(s) for the DLP URL pattern, auth type, and the API owner.
 - CSP: see `cmr-security-csp` template (exact origin + directive + report-only period).
 - External artifacts: "Enable AllowExternalArtifactDeployment on `<environment-id>`; deployments only via pipeline `<repo>/<workflow>` with SP `<sp-name>`."
 
@@ -84,4 +91,4 @@ Run it with [`scripts/Find-CmrOrphanedApps.ps1`](scripts/Find-CmrOrphanedApps.ps
 
 ## Anti-patterns
 
-AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65, AP-74 … AP-80. See [anti-patterns](../../references/anti-patterns.md).
+AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65, AP-74 … AP-81, AP-83. See [anti-patterns](../../references/anti-patterns.md).
