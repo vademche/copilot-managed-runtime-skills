@@ -23,6 +23,7 @@ Read: `ms.config.json`, `package.json`, `src/**`, `generated/index.ts`, `generat
 | Area | Check | Hint | AP |
 |---|---|---|---|
 | Product | CMR, not code apps | `power.config.json`, `@microsoft/power-apps`, `pac code` | AP-01 |
+| Product | No ported code-app auth or Dataverse binding | `paauth`, `Authorization`, `getContext()).user`, `default.cds` | AP-92, AP-93 |
 | Config | `ms.config.json` committed, no secrets, not hand-edited | `git log -p ms.config.json` | AP-10, AP-44 |
 | Generated | `generated/` + `.ms/schemas/` committed, untouched | `git log --format=%an -- generated/` | AP-11, AP-12 |
 | Tooling | CLI + vite plugin pinned | `"@microsoft/managed-apps-cli": "^` | AP-13 |

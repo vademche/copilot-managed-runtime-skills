@@ -8,6 +8,10 @@ Each entry: **what it looks like → why it hurts → do this instead.** IDs (`A
 |---|---|---|---|
 | AP-01 | Using Power Apps **code apps** tooling (`pac code`, `@microsoft/power-apps`, `power.config.json`) in a CMR project | Different product, runtime, config and governance; commands silently target the wrong thing | CMR = `ms` CLI + `@microsoft/managed-apps` + `ms.config.json` |
 | AP-02 | Treating CMR like a generic static host (Azure SWA, any CDN) | CMR host injects auth, connections, governance; the bundle must use the SDK | Build an SPA that talks to data **only** via the SDK / generated services |
+| AP-92 | Porting code-app auth code: requesting connector tokens, building `Authorization` headers, or reading `getContext().user` | In CMR the host injects auth over a MessagePort and app JS never holds a token. `getContext()` has no user, and `getUser()` has no UPN (lab) | Call generated services only; use `getUser()` for `fullName` / `objectId` |
+| AP-93 | Porting `databaseReferences["default.cds"]`, or assuming Dataverse is always the app's own environment | In CMR, Dataverse is a connector reference keyed by org URL. A copied or hand-written binding points at whichever org it names (lab) | `ms app add data-source --connector commondataserviceforapps --as table`; check the org URL in `ms.config.json` per stage (AP-90) |
+| AP-94 | Assuming `ms app delete` removes the source code | The native Git repo survives the delete (lab), so the code and its data-source wiring stay in the environment | Mirror it if you need history, then `DELETE https://<env-host>/appframework/git/repositories/<repository-id>` (ID from `cloneUrl` in `ms app info --json`, taken **before** deleting) |
+| AP-95 | Governing CMR apps with code-app controls (`PowerApps_AllowCodeApps`, environment CSP, Power Apps API DLP evaluation) | CMR apps aren't Power Apps app records: no `executionRestrictions`, `404` in that API (lab). Their CSP, sharing and connector rules come from the environment group | Set rules on the environment group in the Microsoft 365 admin center ([governance-quick-ref](governance-quick-ref.md)) |
 
 ## Project & config
 

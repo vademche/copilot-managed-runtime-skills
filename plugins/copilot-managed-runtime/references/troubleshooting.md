@@ -104,6 +104,9 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 |---|---|---|
 | Admin can't see a citizen's app in `ms app list` | the list is RBAC-scoped (only apps shared with you) | inventory API / MAC → All apps ([inventory-orphans-adoption](inventory-orphans-adoption.md)) |
 | `Get-AdminPowerApp` / Power Apps admin API → `404 ApplicationNotFound` for a CMR app | that API covers canvas and code apps, not CMR apps | inventory API; no owner reassignment for CMR apps in preview |
+| Deleted app's source still clonable / repo still listed | `ms app delete` doesn't delete the native Git repo | `DELETE …/appframework/git/repositories/<repository-id>` (AP-94) |
+| No connection appears after `ms app add data-source --use-sso` for an action connector | none is created at design time (lab); it's bound when the user consents at runtime **[inferred]** | expected; check the app runs and prompts for consent |
+| `getUser()` has no UPN / `getContext().user` is `undefined` | CMR exposes only `fullName`, `objectId`, `tenantId`; code-app habits (AP-92) | use `objectId` as the key; look up UPN with an Office 365 Users data source if needed |
 | Inventory query → `403` | service principal, or user lacks Power Platform admin / Global Reader | delegated admin token |
 | Inventory query returns 0 rows, `resultTruncated: 1` | `Options.Top` used | use a `take` clause and page with `skipToken` |
 | Tenant `/appframework/apps` or `/locate` → `403 InsufficientDelegatedPermissions` | those scopes are only granted to the `ms` CLI client | use `ms app info --app <app-id>` (resolves the environment itself) |

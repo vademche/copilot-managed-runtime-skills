@@ -119,7 +119,7 @@ ms app list --permission edit|play --json     # {appId, displayName, lastDeploye
 ms app info --json                            # server-side state: owners, last deployed commit, live/preview URLs
 ms app get-settings [--json]
 ms app set-setting --show-header false        # writes appSettings.showHeader; applies on next dev/deploy (see note)
-ms app delete [--app <name>] [-e <env-id>] --force   # soft-delete; does NOT delete local code, the Git repo, or your connections
+ms app delete [--app <name>] [-e <env-id>] --force   # soft-delete; does NOT delete local code, the Git repo (AP-94), or your connections
 ```
 
 **`--show-header false` (verified, 0.27):** `showHeader` is the only app setting in the 0.27 schema. After deploy, the host header bar (home button + user avatar) disappears from the running app, but the host **loading screen** ("Fetching your app…") still shows it. Hiding it means your app must provide its own navigation, user identity (`getUser()`), and a way back to the app list. Commit `ms.config.json`, then deploy.

@@ -30,7 +30,7 @@ The mode is stamped as `repoType` in `ms.config.json` at create/init time and **
 - **Clone/push:** `ms app clone <app-name>` writes the remote and the GCM OAuth settings. GCM needs an interactive browser, so agent shells can't complete it. See `cmr-setup-auth` for the device-code bearer-token workaround. **[lab]**
 - **Builds:** `git push` does **not** build. Preview, `ms app build` and `ms app deploy` trigger a build of the latest `main`. Deploy without flags ships the latest *successful* build on `main`, and `--commit <sha>` pins it or rolls back. **[docs]**
 - **Gaps:** no PR workflow, no branch protection, no code scanning, pushes not audited. Anyone with edit access can push straight to `main` and the next preview/deploy picks it up.
-- **Before deleting an app**, mirror the repo (`git clone --mirror`) if you need history. Whether the repo is retained after `ms app delete` isn't documented. **[inferred]**
+- **Deleting an app leaves the repo behind.** After `ms app delete`, `git ls-remote` still returned `main`. The CLI only deletes a repo to roll back a failed create. To remove it, note the repository ID from `cloneUrl` (`ms app info --json`) first, mirror it if you need history, then send `DELETE https://<env-host>/appframework/git/repositories/<repository-id>` (returned `204`) (AP-94). **[lab, 0.27]**
 
 ## 3. Bring your own GitHub (`github`): the enterprise-managed repo
 

@@ -18,6 +18,12 @@ allowed-tools: Read, Grep, Glob, Bash
 
 If signals are mixed, stop and ask the user which product they target (AP-01).
 
+**Porting from a code app.** Both products can share an environment, its connectors, connections and Dataverse, but nothing in the project carries over (lab):
+- There's no config conversion. Create a new CMR app and re-add every data source, Dataverse included, with `ms app add data-source`.
+- Remove code that requests tokens, builds `Authorization` / `paauth` headers or reads `getContext().user`. The CMR host injects auth, and `getUser()` returns `fullName`, `objectId` and `tenantId` with no UPN (AP-92).
+- Don't copy `databaseReferences["default.cds"]`. Dataverse is a connector reference keyed by org URL (AP-93).
+- Swap solution-based ALM for Git plus `ms app deploy`. CMR apps aren't Power Apps app records: the Power Apps API returns 404 for them, and their rules come from the environment group (AP-95).
+
 ## 2. Mental model
 
 ```

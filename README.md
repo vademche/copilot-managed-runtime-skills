@@ -14,7 +14,7 @@ CMR runs single-page apps (React/Vite/TypeScript or any framework) on a Microsof
 - **Stay inside policy.** That means connector and MCP allow-lists, sharing limits, CSP, and the environment-group routing set by admins.
 - **Keep generated code generated.** Wrap `generated/services/*` behind `src/data/*`; never hand-edit them.
 - **Hand over cleanly.** A citizen maker starts an app in Copilot Studio or Cowork; a pro developer takes over the source and can give it back.
-- **Avoid the 76 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
+- **Avoid the 80 known anti-patterns.** These are catalogued with fixes in [`anti-patterns.md`](plugins/copilot-managed-runtime/references/anti-patterns.md).
 
 These skills package that knowledge so a coding agent can follow it step by step.
 
