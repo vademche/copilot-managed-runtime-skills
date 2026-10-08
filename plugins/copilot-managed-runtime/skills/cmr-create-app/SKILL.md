@@ -21,7 +21,27 @@ GitHub mode pre-flight: `gh repo create <org>/<repo> --private` (no `--add-readm
 
 ## 2. Pick the environment
 
-Omit `-e` to use (or provision) the maker's personal developer environment. Pass `-e <environment-id>` only if the admin routed you to a specific environment. Dataverse may live elsewhere — bind it cross-environment later (`cmr-dataverse`).
+The developer chooses. `ms app create` / `init` resolves the environment in this order:
+1. **Managed project** environment (`MS_CLI_ALM` preview). A different `-e` is an error.
+2. **`-e <environment-id>`.** Any environment where you have rights and the per-environment setting "Allow app creation with the CMR CLI" is on.
+3. **Routing.** Without `-e` the CLI prints "No environment specified — resolving your developer environment…". It reuses your **personal developer environment** or provisions one, polling for up to about 2 minutes. That environment is a managed environment in the routing rule's group, you're its admin, and it has **no Dataverse**.
+
+The ID is written to `ms.config.json`, so later commands follow it (`-e` overrides per command). `ms` can't list or create environments.
+
+| Building | Use |
+|---|---|
+| A prototype or personal tool | omit `-e` (personal developer environment) |
+| A team or business app | `-e <team-environment-id>`: in a governed group, with Dataverse if needed and ≥2 owners (AP-88) |
+| Never | the Default environment or another ungrouped environment, to get round policy (AP-89) |
+
+Governance follows the **environment's group**: connectors, sharing and CSP rules come from the group, not from you. Check before building: `ms connector list -e <id> --only-allowed --json`.
+
+Errors:
+- 400 "Managed App creation from CLI is not enabled for environment …" → the admin turns on the rule for that environment or group.
+- Exit 5 "Could not reach environment …" → wrong ID or wrong `--cloud`.
+- "Could not provision a Developer environment …" → no routing rule covers you; ask the admin.
+
+No suitable environment? See [governance-quick-ref](../../references/governance-quick-ref.md) → *Environments* for how to create or request one. Dataverse may live elsewhere: bind it across environments with `--dataverse-environment-id` (`cmr-dataverse`, AP-28).
 
 ## 3. Pick a template
 
@@ -65,4 +85,4 @@ Existing SPA instead: `cd my-spa && ms app init -n "My SPA" --repo native|none|<
 
 ## Anti-patterns
 
-AP-01, AP-10, AP-13, AP-16, AP-17, AP-18, AP-19, AP-40. See [anti-patterns](../../references/anti-patterns.md).
+AP-01, AP-10, AP-13, AP-16, AP-17, AP-18, AP-19, AP-40, AP-88, AP-89, AP-90. See [anti-patterns](../../references/anti-patterns.md).

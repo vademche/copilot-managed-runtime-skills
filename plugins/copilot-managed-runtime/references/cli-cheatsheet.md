@@ -46,7 +46,7 @@ ms git auth refresh --repo <github-url>   # external GitHub (GHEC) mapping, devi
 
 ```bash
 ms app create -n "Contoso Expenses" ./contoso-expenses              # platform-managed Git (default)
-ms app create -n "Contoso Expenses" -e <environment-id> ./app       # explicit environment
+ms app create -n "Contoso Expenses" -e <environment-id> ./app       # explicit environment (otherwise: routed personal developer env, no Dataverse)
 ms app create -n "Contoso Expenses" --repo https://github.com/contoso/expenses ./app  # external GHEC repo (must exist and be EMPTY)
 ms app create -n "Contoso Expenses" --repo none ./app               # no Git; external artifact deploy (admin must allow)
 ms app create -n "Contoso Expenses" -t github:contoso/cmr-templates/react-fluent ./app  # org golden template
@@ -58,6 +58,8 @@ ms app info --app <app-id> --json                                    # any app y
 The app ID is the last segment of the play URL. `ms app list` only shows apps shared with you; for a tenant-wide inventory see [inventory-orphans-adoption](inventory-orphans-adoption.md).
 
 `--repo` choice is **fixed at creation**. Choose deliberately (see `cmr-create-app`).
+
+Environment: the ID chosen at create time is stored in `ms.config.json`; every command accepts `-e` to override it. Without `-e`, `create` resolves the personal developer environment through routing. There's no `ms` command to list or create environments; see [governance-quick-ref](governance-quick-ref.md) → *Environments*.
 
 ## Connectors and data sources
 

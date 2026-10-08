@@ -25,6 +25,8 @@ Tenant
 
 The default group is created on first app creation and immediately blocks the long tail of connectors (lab: ~1,280 of ~1,300 blocked; ~20 Microsoft 365 connectors + Work IQ/Learn MCP allowed).
 
+**Environments.** Makers can target any environment with `ms app create -e` where "Allow app creation with the CMR CLI" is on. That includes the Default environment and new Developer environments, where it was on in the lab. So the group an environment sits in, not the maker, decides the rules. Restrict creation where it shouldn't happen, give teams governed team environments, and handle environment requests (template and API in [governance-quick-ref](../../references/governance-quick-ref.md) → *Environments*). Routing rules: CMR routing can't be disabled; if you have rules but no "Everyone" rule, only makers in the rules' security groups can create CMR apps.
+
 ## 2. Recommended tiering
 
 | Group | Members | Connectors/MCP | Sharing | CSP | CLI | External artifacts |
@@ -91,4 +93,4 @@ Run it with [`scripts/Find-CmrOrphanedApps.ps1`](scripts/Find-CmrOrphanedApps.ps
 
 ## Anti-patterns
 
-AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65, AP-74 … AP-81, AP-83. See [anti-patterns](../../references/anti-patterns.md).
+AP-27, AP-31, AP-35, AP-36, AP-37, AP-46, AP-56, AP-60, AP-65, AP-74 … AP-81, AP-83, AP-89, AP-91. See [anti-patterns](../../references/anti-patterns.md).

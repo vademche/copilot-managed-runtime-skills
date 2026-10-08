@@ -25,6 +25,11 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | "Unable to determine the Dataverse organization URL" | env has no Dataverse | `--dataverse-environment-id <env-with-dataverse>`; delete the dangling connection (portal or Connectivity API, see `cli-cheatsheet.md` → Cleaning up connections) |
 | Ambiguous connection error (non-interactive) | >1 connection for connector | pass `-c <connection-id>` or `--use-sso` |
 | `ms app create` fails: can't create | no routing rule / CLI creation disabled for your group | admin: routing + "Allow app creation with the CMR CLI" |
+| 400 `Managed App creation from CLI is not enabled for environment '<id>'` | `-e` points at an environment where `ManagedApps_AppCreationFromCLI` is off | admin turns on "Allow app creation with the CMR CLI" for that environment or its group; or use another environment |
+| Exit 5 `Could not reach environment <id>. Its endpoint did not resolve` | wrong or foreign environment ID, or wrong `--cloud` | check the ID (PPAC, `ms app info`), stage variables and `ms.config.json` (AP-90) |
+| `Could not provision a Developer environment for your tenant (status …)` | no routing rule covers you (tenant has rules but no "Everyone" rule) or provisioning failed | admin adds you to a routed security group; or pass `-e` to an environment you're allowed to use |
+| `Timed out waiting for a Developer environment to provision.` | first-time routing still provisioning | retry in a few minutes |
+| `pac admin create` "macroRegion '…' is not valid" / BAP `MacroRegionRequired` | tenant requires macro regions | Power Platform API provisioning with `macroRegion` (governance-quick-ref → Environments) |
 | `ms app create --repo <url>` fails | repo not empty (even a README/`.gitignore`) / not a GHEC org repo / bare-host URL / mapping expired | fresh empty private GHEC repo with full `https://` URL; `ms git auth refresh --repo <url>`; `--force-reauth` |
 | `GitHubMappingMissing` / `GitHubMappingExpired` / `GitHubMappingStale` | per-user Entra↔GitHub mapping absent or expired | `ms git auth refresh --repo <url>` inside the app folder |
 | `GitHubAuthDenied` / device code `UnprocessableEntity` | Managed Apps GitHub App declined or blocked by org policy / unsupported host | approve the app (org owner may need to allow it); check host is GHEC/`*.ghe.com` |

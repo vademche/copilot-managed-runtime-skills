@@ -4,9 +4,9 @@ Everything here is tenant-agnostic. Admin portals: **Microsoft 365 admin center 
 
 ## Where apps live
 
-- Each maker builds in their **personal developer environment** (auto-created by the routing rule on first `ms app create` if they don't have one). Apps are **not** in the default environment.
+- By default each maker builds in their **personal developer environment**, auto-created by the routing rule on the first `ms app create` without `-e`. A developer can target another environment with `-e`, including the Default environment if CLI creation is on there (lab). See *Environments* below.
 - A tenant-wide **default environment group** ("Everyone", Microsoft-managed) is created on first app creation with 4 rules: **routing**, **connectors + MCP**, **sharing**, **CSP**.
-- No routing rule match → the maker **cannot create apps**. The "Everyone" catch-all can't be modified after init, and CMR routing can't be turned off.
+- CMR routing is on in every tenant and can't be turned off. If the tenant has no routing rules, an "Everyone" rule and the default group are created. If it already has rules but no "Everyone" rule, **only makers in those rules' security groups can create CMR apps**. The "Everyone" rule can't be deleted and must stay last in priority.
 - Admins can create additional env groups (e.g. a "Pro-dev" group with wider connectors / CSP) and route specific security groups to them.
 
 ## Rules and their defaults
@@ -17,10 +17,45 @@ Everything here is tenant-agnostic. Admin portals: **Microsoft 365 admin center 
 | Connectors + MCP | 18 Entra-only first-party connectors + MCP list; open-ended HTTP / script / Custom API actions blocked; custom and third-party connectors blocked | allow/block connectors & actions; *Edit this policy* = **full control** (Microsoft stops auto-updating the list). Custom connectors aren't supported in ACP per docs → govern them with classic DLP |
 | Sharing | org-wide on / guests per tenant setting; **share links blocked** ("viral sharing"). An ungrouped environment has no sharing rule, so links worked there [lab] | allow org-wide, guests, links |
 | CSP | strict (see `cmr-security-csp`) | add origins per directive, report-only mode, report endpoint |
-| CLI creation | PPAC env-group rule "Allow app creation with the CMR CLI" | turn off to force citizen-only surfaces |
+| CLI creation | PPAC env-group rule "Allow app creation with the CMR CLI" (environment setting `ManagedApps_AppCreationFromCLI`; a published group rule locks it). It was on in the routed, Default and newly created Developer environments in the lab, and off in one existing sandbox | turn off to force citizen-only surfaces |
 | External artifacts | **off** (`--repo none` / `--artifact` deploy fails) | PPAC → Copilot → Settings → Managed apps, or env-group rule |
 
 ACP vs DLP: if "Advanced connector policies only" is off, both ACP and DLP apply and **the most restrictive wins**. Both are enforced on every `ms app deploy` (403 `AcpDlpPolicyEvaluation`); the CLI's add-time check is advisory.
+
+## Environments: where an app goes, and how to get one
+
+**How `ms app create` / `init` picks the environment** (ms 0.27, CLI source plus lab):
+1. A managed project's environment (`MS_CLI_ALM` preview). A different `-e` is an error.
+2. `-e <environment-id>`.
+3. Otherwise the routing service. It returns the maker's personal developer environment (the first alphabetically if they own several) or provisions one, with the CLI polling for up to about 2 minutes. The CLI asks for it **without Dataverse**.
+
+The ID is saved in `ms.config.json` and later commands use it; `-e` overrides it per command. `ms` has no command to list, create or request environments.
+
+**The developer can choose**, but governance follows the environment's group. Lab results with ms 0.27:
+
+| `-e` target | Group | `ms app create` | ACP-blocked connectors |
+|---|---|---|---|
+| omitted (routed personal developer env) | CMR default group | created | ~1,280 of ~1,300 |
+| Default environment | none | created | 0 (DLP only) |
+| New Developer environment created through the API | none | created | 0 |
+| Existing sandbox with CLI creation off | none | 400 "Managed App creation from CLI is not enabled for environment '…'. Ask the environment administrator to enable the 'ManagedApps_AppCreationFromCLI' environment setting." | — |
+| Wrong ID | — | exit 5 "Could not reach environment …" | — |
+
+**Personal developer environment** (docs): a managed environment, but no premium licence is needed if it's only used for CMR. The maker is its environment admin. It has **no Dataverse** until someone adds it in PPAC (*Add Dataverse*), or until the maker is routed there from Power Apps, Power Automate or Copilot Studio. The tenant setting "Developer environment assignments" doesn't stop routing from creating it. Use it for prototypes, not team apps (AP-88).
+
+**Getting another environment:**
+
+| Route | Who | Notes |
+|---|---|---|
+| Do nothing | any maker covered by a routing rule | the first `ms app create` without `-e`, or the first CMR app from a citizen surface, provisions the personal environment |
+| PPAC or Power Apps → *New environment* | makers, if "Developer / Production / Trial environment assignments" = Everyone | admins can restrict to "Only specific admins" (PowerShell: `disableDeveloperEnvironmentCreationByNonAdminUsers`, `DisableEnvironmentCreationByNonAdminUsers`) |
+| Power Platform API `POST https://api.powerplatform.com/environmentmanagement/provisioning/environments?api-version=2024-10-01` | admins, or makers where allowed | body `displayName`, `environmentSku` (`Developer` / `Sandbox` / `Production`), `macroRegion` (lowercase code such as `eu-efta`; an invalid value returns `InvalidMacroRegion`) or `location`, optional `databaseType`, `parentEnvironmentGroup`. Lab: a Developer environment without Dataverse returned 201 and was ready in seconds |
+| `pac admin create` / BAP API | admins | in tenants that require a macro region, pac 2.10 fails ("macroRegion … is not valid") and BAP returns `MacroRegionRequired`; use the API above (AP-91) |
+| Request process | makers where creation is restricted | CoE Starter Kit *Environment Request* apps, or the service desk |
+
+**Request template:** "Environment for `<app>`: type `<Developer|Sandbox|Production>`, region `<macro-region>`, group `<env-group>`, Dataverse `<yes/no>`, CLI creation on, owners `<security group>`, stages `<dev/test/prod>`."
+
+**Admin follow-up for every new CMR environment:** put it in a governed group (at creation via `parentEnvironmentGroup`, or in PPAC), confirm the CLI-creation rule, add Dataverse if needed, and review ungrouped environments regularly (AP-36). Deleting a test environment: `POST …/scopes/admin/environments/<id>/validateDelete` then `DELETE` (BAP admin API), or PPAC.
 
 ## Roles
 
