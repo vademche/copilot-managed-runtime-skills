@@ -55,8 +55,8 @@ Owned by the CLI and SDK. **Do not hand-edit** — use `ms app add/remove/refres
 | Property | Shape | Status |
 |---|---|---|
 | `data` (legacy alias `db`) | `{ schemaPath }` | Hints at app-owned data with service-run migrations (`ms app deploy` help mentions "app data migration"). Not documented — don't rely on it yet. |
-| `functions` | `{ baseDirectory }` | Server-side functions — not documented. |
-| `hasCustomMiddleTier` | boolean | Not documented. |
+| `functions` | `{ baseDirectory }` | Server functions; **undocumented**. In ms 0.27 (lab), `ms app pack` bundles every `*.ts` under the folder (not `.d.ts` / `.test.ts` / `.spec.ts`) with esbuild (ESM, es2022, platform `neutral`) into `functions.zip`. It routes each file at `/<folder>/<path-without-.ts>`. Imports are allow-listed: relative, `generated/*` and `@microsoft/managed-apps/data`; anything else fails with `allowlist-imports`. The deploy succeeded, but calls returned `501 MiddleTierRequestsNotSupported` (AP-97). |
+| `hasCustomMiddleTier` | boolean | Set to `true` in the packed manifest automatically when `functions` is present. Not documented. |
 
 Agents: if you see these in a repo, preserve them and ask the owner; don't invent values.
 

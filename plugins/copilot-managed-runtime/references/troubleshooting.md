@@ -58,6 +58,7 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | `External artifact deployment is disabled` / `…is not enabled for this environment… AllowExternalArtifactDeployment` | `repoType none` / `--artifact` without admin opt-in | admin enables external artifacts |
 | Deploy `403 AcpDlpPolicyEvaluation`: "…cannot be saved because one or more connectors it uses … are blocked by Advanced Connector Policy (ACP) or Data Policies (DLP)…" | `ViolationType: BlockedConnector` = connector not on the group's ACP list (also after an admin removed it); `BusinessAndNonBusinessConnector` = classic DLP data-group mix, not caught at add time | remove the data source, or get the policy changed; never hand-edit around it (AP-81) |
 | `Build failed: BuildFailed: Command exited with code 2: npm run build` after adding a non-curated connector | its OpenAPI definition generated TypeScript that doesn't compile (TS2300 / TS2304 / TS1016) | `npm run build` locally; re-add with `--skip-codegen` and wrap `executeAsync`; or drop the broken generated files (AP-85) |
+| `ms app pack` / deploy: `[plugin: allowlist-imports] Import '<module>' is not on the allowlist` | a file under the `functions.baseDirectory` folder imports a Node built-in or an npm package. Server-function bundles only allow relative imports, `generated/*` and `@microsoft/managed-apps/data` (lab) | move the logic out of `functions/` ([connectors-and-policy](connectors-and-policy.md) → *Alternatives when the connector isn't allowed*); server functions aren't callable yet anyway (AP-97) |
 | CI: `Repositories.MicrosoftApps.Deploy.Write` forbidden | SP lacks env role | Dataverse env: app user with System Administrator/Customizer; else EnvironmentAdmin via BAP role assignment |
 | CI: `400 Principal not found` | used client ID where object ID is needed | Enterprise apps → **object ID** |
 | CI: `ms.config.json not found` | wrong `working-directory` | set the action input |
@@ -84,6 +85,7 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | Work IQ returns string not JSON | SSE framing | parse SSE (`cmr-mcp-workiq`) |
 | Dataverse MCP returns `403` "not authorized to access MCP" | the client isn't in the environment's Dataverse MCP allowed clients | admin adds the client in PPAC → environment → Features → Dataverse MCP |
 | Local Play works, prod breaks | different CSP / origins between dev and host | test in preview URL before deploy |
+| `fetch('/functions/<name>')` → `501 MiddleTierRequestsNotSupported`: "Managed App middle-tier requests are not currently available in this environment." | server functions are packed and deployed, but the gateway doesn't run them (lab, ms 0.27). An unknown route returns `404 AppBlobNotFound` instead | don't depend on server functions; use a Dataverse custom API or plug-in, an event-driven flow, or an API behind a custom connector ([connectors-and-policy](connectors-and-policy.md) → *Alternatives when the connector isn't allowed*, AP-97) |
 
 ## Sharing
 

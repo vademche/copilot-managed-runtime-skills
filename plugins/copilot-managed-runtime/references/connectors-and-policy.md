@@ -148,7 +148,8 @@ Hand-editing `ms.config.json` or `generated/` past a CLI block only moves the fa
 | A curated connector or Microsoft MCP server that covers the need | Yes [doc] | First choice |
 | Feed the data into Dataverse or SharePoint from an integration you own (Power Automate, Logic Apps, Functions) | Yes [inf] | The app stays on curated connectors; the integration is governed on its own |
 | Dataverse custom API / plug-in | Only if the admin unblocks "Perform bound/unbound action" under full control [doc] | Unblocks every custom API on that connector |
-| Call a Power Automate flow from the app | No flow data-source type is documented for CMR; untested | Trigger flows indirectly (a Dataverse row or SharePoint item the app writes) |
+| Call a Power Automate flow from the app | No flow data-source type in `ms` 0.27 [lab]; untested | Trigger flows indirectly (a Dataverse row or SharePoint item the app writes). Don't port `pa app add flow` (AP-96) |
+| CMR server functions (`functions.baseDirectory`) | No: they pack and deploy, but calls return `501 MiddleTierRequestsNotSupported` [lab] | Undocumented; don't build on them (AP-97) |
 | API Management / Azure Functions front-end exposed as a custom connector | Same rules as any custom connector [inf] | Good fit for a DLP-governed group; the API owns auth and throttling |
 | Direct `fetch` after the admin adds the origin to CSP `connect-src` | Technically yes [doc] | **Anti-pattern**: bypasses connector governance and DLP (AP-20) |
 
