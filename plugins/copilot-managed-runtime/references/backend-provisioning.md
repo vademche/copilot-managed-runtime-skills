@@ -148,6 +148,8 @@ foreach ($b in 'Done','In progress','New') { if ($b -notin $existing) {
 
 Planner binds only `--as action` (there's no table mode). Store the plan ID and bucket IDs as **app configuration**: a constants module per environment, generated from the provisioning output. Never hard-code them in components.
 
+> **ms 0.27 caveat [lab]:** the generated `PlannerService.ts` doesn't compile (TS2552: `GetTaskDetails_Responsetype`, `UpdateTaskDetails_Requesttype`). `ms app refresh data-source --name planner --offline` doesn't fix it, so the app can't build or deploy. Until the codegen is fixed, run `npm run build` right after binding. If it fails, `ms app remove data-source --name planner` and keep Planner task writes out of the app (for example a flow or backend job). Never patch `generated/`.
+
 ## 7. Bind the app
 
 ```bash

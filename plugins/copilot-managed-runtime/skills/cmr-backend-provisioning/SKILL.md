@@ -47,7 +47,7 @@ Lab-verified details:
 - Choice values = option-value prefix × 10000 + n. They're generated as typed `as const` maps.
 - A same-environment Dataverse bind needs no `--dataverse-environment-id`.
 - A library bound `--as table` gives metadata only. Upload bytes with the SharePoint `CreateFile` action.
-- Planner binds as actions only. The runtime surface has `CreateBucket` but no plan creation.
+- Planner binds as actions only. The runtime surface has `CreateBucket` but no plan creation. In ms 0.27 the generated Planner service doesn't compile (TS2552), so build right after binding and remove it if the build fails ([backend-provisioning](../../references/backend-provisioning.md) §6).
 - `pac solution clone` output contains the managed variants, so `pac solution pack --packagetype Managed` works straight from Git.
 
 ## 4. Citizen → pro-dev angle

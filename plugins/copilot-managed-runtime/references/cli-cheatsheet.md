@@ -95,7 +95,7 @@ ms app pack                                  # local build + stage to .ms/packed
 git push                                     # Git-backed apps build from COMMITS, not your working tree
 ms app build --commit <sha> [--no-wait]      # cloud build (~30–60 s)
 ms app build-status --commit <sha> --show-log
-ms app deploy [--commit <sha>]               # build (or reuse) + promote to LIVE
+ms app deploy [--commit <sha>]               # build (or reuse) + promote to LIVE ("publish"; until the first deploy the portal shows the app as not published)
 ms app deploy --force                        # dirty tree / local ahead of origin — avoid outside prototyping
 ms app deploy --artifact ./app.zip           # repoType none only, admin-gated
 ms app play --mode live|preview [--commit <sha>] --no-browser
@@ -108,10 +108,11 @@ URLs: live `https://<play-host>/apps/<app-id>`; preview `.../apps/<app-id>/branc
 ```bash
 ms app share alice@contoso.com,team-sg@contoso.com --access play    # users or groups, csv
 ms app share bob@contoso.com --access edit                           # co-maker (pro-dev handoff)
-ms app share <sp-object-id> --access test                            # test operator (e.g. automation SP) — object ID, not client ID
-ms app unshare alice@contoso.com [--access play|edit|test]           # each call touches one access level
-ms app share list [--access play|edit]
-ms app share link create | list | revoke      # blocked by default sharing rules (viral sharing)
+ms app share <sp-object-id> --access test                            # test operator — only in non-production validation envs (else 400 FeatureNotEnabled)
+ms app unshare alice@contoso.com [--access play|edit|test]           # one level per call; wrong level = success with revokedCount 0
+ms app share list [--access play|edit|test]                          # roles: MicrosoftAppReader / RepositoryContributor / MicrosoftAppTestOperator
+ms app share link create | list               # grants MicrosoftAppReader on redemption; blocked where the group's sharing rule forbids links
+ms app share link revoke --link-id <id>       # broken in 0.27; REST DELETE <env-host>/appframework/apps/<app-id>/shareLinks/<id>?api-version=1
 ms app list --permission edit|play --json     # {appId, displayName, lastDeployedTime, appPlayUri, hasEditAccess, cloneUrl}
 ms app info --json                            # server-side state: owners, last deployed commit, live/preview URLs
 ms app get-settings [--json]

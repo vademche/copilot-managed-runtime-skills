@@ -29,10 +29,13 @@ Full symptom tables: [troubleshooting](../../references/troubleshooting.md).
 | Import error `XService is not exported` | Dataverse services are default exports | `import XService from ...` |
 | Build error importing `@microsoft/managed-apps` | no root export | use `/app`, `/auth`, `/data`, `/telemetry` |
 | Pushed but live unchanged | live only updates on deploy | `ms app deploy --commit <sha>` |
+| Portal says "not published"; can't run or edit | never deployed | push, then `ms app deploy` |
+| TS2552 in `generated/services/PlannerService.ts` | Planner codegen broken in 0.27 | `ms app remove data-source --name planner`; never edit `generated/` |
 | Deploy "working tree dirty / ahead of origin" | uncommitted/unpushed | commit + push (avoid `--force`) |
 | "External artifact deployment is not enabled" | env setting off | admin enables AllowExternalArtifactDeployment |
-| `AppShareLinkForbiddenForViralSharing` (403) | share links blocked | share with groups |
-| `share list --access edit` → 401 | preview bug | verify via `ms app list --permission edit` as co-owner |
+| `AppShareLinkForbiddenForViralSharing` (403) | group sharing rule blocks links | share with groups |
+| `share link revoke --link-id` → "Provide a share link ID" | CLI bug in 0.27 | REST `DELETE …/shareLinks/<id>` (`cmr-sharing`) |
+| `share list --access edit` → 401 | transient preview issue | retry; or `ms app list --permission edit` as co-owner |
 | "Refused to connect/load ..." | CSP | bundle asset / use connector / admin CSP change (`cmr-security-csp`) |
 | Duplicate records created | effect ran twice | idempotent effects, no writes on mount |
 | Empty list, no error shown | `success:false` ignored | check `success`, surface `error` |

@@ -33,6 +33,8 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | `ms app clone` fails | external repo or `repoType none` | `git clone <external-url>`; none-apps have no repo |
 | `git push` prompts / fails in agent shell (platform repo) | Git Credential Manager needs interactive OAuth; in non-interactive shells its browser flow can fail ("Missing 'code' in response") | push once from a user terminal; or get a token via an Entra **device-code** flow (client ID = the repo's `credential.<url>.oauthclientid` git config, scope `https://api.powerplatform.com/.default`) and push with `git -c credential.helper= -c "http.extraHeader=Authorization: Bearer <token>" push`. Start polling in the same process (codes expire in ~15 min), keep the token in memory/temp only, delete it after |
 | `git push` rejected: unrelated histories | remote has an "Initial commit" | `git pull --allow-unrelated-histories`, resolve, push |
+| `git fetch` → "warning: no common commits"; push rejected "fetch first" | same: the service creates the repo with its own README commit, unrelated to the `ms app create` scaffold | `git merge origin/main --allow-unrelated-histories -X ours`, then push |
+| Platform git push → 403 with an Azure CLI token | `az account get-access-token` tokens aren't accepted by the platform git endpoint | use the repo's own OAuth client ID (device code, row above) |
 | CRLF warnings on Windows | line endings | `.gitattributes` with `* text=auto eol=lf` |
 | `--include-blocked` unknown | CLI drift | 0.27 lists all by default; use `--only-allowed` |
 | `ms app show` deprecation | renamed | `ms app info` |
@@ -46,6 +48,8 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | Deploy warns about uncommitted changes / local ahead | cloud builds from the **pushed commit** | commit + push; `--force` only for throwaway prototypes |
 | Build failed | TS errors, missing deps, wrong `buildPath` | `ms app pack` locally first; `build-status --show-log` |
 | Live app didn't change after push | live only changes on deploy | `ms app deploy`; check `ms app info` last deployed commit |
+| Portal (managed apps) shows the app as not published; Run and Edit unavailable | the app was created but never deployed | push, then `ms app deploy --non-interactive --json`; `ms app list --json` then shows `lastDeployedTime` |
+| `npm run build` fails with TS2552 in `generated/services/PlannerService.ts` (`GetTaskDetails_Responsetype`, `UpdateTaskDetails_Requesttype`) | Planner actions codegen in ms 0.27 emits undefined type names; `refresh data-source --offline` doesn't fix it | `ms app remove data-source --name planner`, or call Planner through Graph from a backend; never edit `generated/` |
 | `External artifact deployment is disabled` / `…is not enabled for this environment… AllowExternalArtifactDeployment` | `repoType none` / `--artifact` without admin opt-in | admin enables external artifacts |
 | Deploy `403 AcpDlpPolicyEvaluation`: "…cannot be saved because one or more connectors it uses … are blocked by Advanced Connector Policy (ACP) or Data Policies (DLP)…" | `ViolationType: BlockedConnector` = connector not on the group's ACP list (also after an admin removed it); `BusinessAndNonBusinessConnector` = classic DLP data-group mix, not caught at add time | remove the data source, or get the policy changed; never hand-edit around it (AP-81) |
 | `Build failed: BuildFailed: Command exited with code 2: npm run build` after adding a non-curated connector | its OpenAPI definition generated TypeScript that doesn't compile (TS2300 / TS2304 / TS1016) | `npm run build` locally; re-add with `--skip-codegen` and wrap `executeAsync`; or drop the broken generated files (AP-85) |
@@ -80,8 +84,13 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `share link create` → 403 `AppShareLinkForbiddenForViralSharing` | default sharing rule blocks links | share with groups instead, or admin changes rule |
-| `share list --access edit` → 401 | preview bug (observed 0.27.0) | use `ms app info` owners; retry later |
+| `share link create` → 403 `AppShareLinkForbiddenForViralSharing` | the environment group's sharing rule blocks links (the default group does; an ungrouped env allowed them in the lab) | share with groups instead, or admin changes rule |
+| `share link revoke --link-id <id>` → "Provide a share link ID via --link-id." | CLI bug in 0.27: the ID is never read (`-l`, `=`, positional and `MAAF_SHARE_LINK_ID` fail too) | `DELETE https://<env-host>/appframework/apps/<app-id>/shareLinks/<id>?api-version=1` with a Power Platform API token: 204, then 404 `AppShareLinkNotFound` |
+| `share list --access edit` → 401 | transient preview issue (seen once in 0.27.0; worked later) | retry; or `ms app list --permission edit` as the co-owner |
+| `share --access test` → 400 `FeatureNotEnabled` | the test operator role exists only in non-production validation environments | use `play` for automation identities elsewhere |
+| Share → 400 "group is not security-enabled" | Microsoft 365 (non-security) group | use an Entra security group |
+| Share → 400 "Sharing failed for: x (user or group not found). No permissions were changed." | one bad principal in a comma-separated batch; batches are atomic | fix or drop that principal and re-run the whole batch |
+| `unshare` succeeds but `revokedCount: 0`, principal in `notFound` | wrong `--access` level for that principal | unshare at the level they hold (AP-87) |
 | SP share fails | passed client ID | use SP **object ID** |
 
 ## Inventory, admin APIs and MCP provisioning

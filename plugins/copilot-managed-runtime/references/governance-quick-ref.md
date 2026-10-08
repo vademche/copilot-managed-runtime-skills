@@ -15,7 +15,7 @@ Everything here is tenant-agnostic. Admin portals: **Microsoft 365 admin center 
 |---|---|---|
 | Routing | Everyone → personal dev env | add groups with different rules |
 | Connectors + MCP | 18 Entra-only first-party connectors + MCP list; open-ended HTTP / script / Custom API actions blocked; custom and third-party connectors blocked | allow/block connectors & actions; *Edit this policy* = **full control** (Microsoft stops auto-updating the list). Custom connectors aren't supported in ACP per docs → govern them with classic DLP |
-| Sharing | org-wide on / guests per tenant setting; **share links blocked** ("viral sharing") | allow org-wide, guests |
+| Sharing | org-wide on / guests per tenant setting; **share links blocked** ("viral sharing"). An ungrouped environment has no sharing rule, so links worked there [lab] | allow org-wide, guests, links |
 | CSP | strict (see `cmr-security-csp`) | add origins per directive, report-only mode, report endpoint |
 | CLI creation | PPAC env-group rule "Allow app creation with the CMR CLI" | turn off to force citizen-only surfaces |
 | External artifacts | **off** (`--repo none` / `--artifact` deploy fails) | PPAC → Copilot → Settings → Managed apps, or env-group rule |
