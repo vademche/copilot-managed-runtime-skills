@@ -20,7 +20,7 @@ Everything here is tenant-agnostic. Admin portals: **Microsoft 365 admin center 
 | CLI creation | PPAC env-group rule "Allow app creation with the CMR CLI" (environment setting `ManagedApps_AppCreationFromCLI`; a published group rule locks it). It was on in the routed, Default and newly created Developer environments in the lab, and off in one existing sandbox | turn off to force citizen-only surfaces |
 | External artifacts | **off** (`--repo none` / `--artifact` deploy fails) | PPAC → Copilot → Settings → Managed apps, or env-group rule |
 
-ACP vs DLP: if "Advanced connector policies only" is off, both ACP and DLP apply and **the most restrictive wins**. Both are enforced on every `ms app deploy` (403 `AcpDlpPolicyEvaluation`); the CLI's add-time check is advisory.
+ACP vs DLP: if "Advanced connector policies only" is off, both ACP and DLP apply and **the most restrictive wins**. Both are enforced on every `ms app deploy` (403 `AcpDlpPolicyEvaluation`); the CLI's add-time check is advisory. Classic DLP gaps for CMR (lab): connector **action** rules aren't enforced at deploy or runtime (AP-98), and a tightened policy doesn't stop already-deployed apps until DLP connection re-evaluation disables their connections (AP-99).
 
 ## Environments: where an app goes, and how to get one
 

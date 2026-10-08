@@ -17,7 +17,7 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | `ms` hangs in an agent/CI shell | interactive prompt / device code | add `--non-interactive`; use SP env vars in CI |
 | Exit code 2 listing datasets or tables | discovery flow needs `-d` / `-t` | rerun with the printed value |
 | "Skipped N of M actions due to policy" | blocked actions (HTTP, script, Custom API) | expected; use purpose-scoped actions |
-| Connector missing / `403` on add | not on env-group allow-list or blocked by ACP/DLP | `ms connector list --search <name> --json` (check `isBlocked`); ask admin |
+| Connector missing / `403` on add | not on env-group allow-list or blocked by ACP/DLP | `ms connector list --search <name> --json` (check `isBlocked`; it reflects the ACP, not classic DLP data groups or the DLP Blocked group); ask admin |
 | Exit 2: `Connector '<name>' is blocked by your organization's connector policy.` | custom, third-party or independent-publisher connector not on the group's ACP list (the default) | curated alternative, or admin request ([connectors-and-policy](connectors-and-policy.md) → Custom and non-curated connectors); after an allow, wait ~1 min and retry |
 | `Could not verify connector policy; proceeding without enforcement.` | CLI policy lookup failed; the add-time check is fail-open | deploy still enforces policy; check `ms auth status` |
 | `git push` rejected: `SecretsScan: … Shared Access Signature … in .ms/schemas/…` | custom-connector schema embeds SAS swagger URLs (`properties.apiDefinitions`) | delete `properties.apiDefinitions` from that schema file, amend, push (AP-82) |
@@ -81,6 +81,9 @@ Collect `host.sessionId` (from `getContext()`) and any `error.requestId` from `I
 | `AppEntitlementIssue` | no Power Apps Premium / credits not configured | licensing (`cmr-licensing-cost`) |
 | `AppIsInQuarantine` | admin quarantined/blocked app | admin, MAC → Apps |
 | Data calls `success:false` with `403` | user lacks data-source permission or action blocked by updated policy | grant data permission; review policy change |
+| Data calls `success:false`, `status 400` "Error from token exchange: The connection is disabled so it cannot be used." | DLP connection re-evaluation disabled the connection because its connector is now blocked (lab) | get the policy changed or remove the data source and redeploy; deleting the connection doesn't help (next row) |
+| Consent dialog loops or the host logs `ConsentDenied`; `PUT …/connections/<id>` → 400 `ConnectionApiPolicyViolation` | a DLP policy blocks creating connections for that connector (lab) | same as above; the app's next deploy also fails with 403 `AcpDlpPolicyEvaluation` |
+| A DLP-blocked connector or action still works in a deployed app | classic DLP isn't re-checked for existing connections, and action rules aren't enforced for CMR (lab) | admin runs DLP connection re-evaluation; block the whole connector instead of single actions (AP-98, AP-99) |
 | Duplicate records on load | effect ran twice | idempotent effects |
 | Work IQ returns string not JSON | SSE framing | parse SSE (`cmr-mcp-workiq`) |
 | Dataverse MCP returns `403` "not authorized to access MCP" | the client isn't in the environment's Dataverse MCP allowed clients | admin adds the client in PPAC → environment → Features → Dataverse MCP |

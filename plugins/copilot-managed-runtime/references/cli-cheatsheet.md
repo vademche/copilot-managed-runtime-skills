@@ -64,8 +64,8 @@ Environment: the ID chosen at create time is stored in `ms.config.json`; every c
 ## Connectors and data sources
 
 ```bash
-ms connector list --json                         # 0.27.0: includes blocked (`isBlocked`); --only-allowed filters; --search <text> (docs say --include-blocked)
-ms connector list-actions --connector office365users --json
+ms connector list --json                         # 0.27.0: includes blocked (`isBlocked`, ACP only, not classic DLP); --only-allowed filters; --search <text> (docs say --include-blocked)
+ms connector list-actions --connector office365users --json   # `behavior` shows ACP and classic DLP action rules (DLP ones aren't enforced, AP-98)
 ms app add data-source --connector office365users --as action --use-sso --non-interactive
 ms app add data-source --connector "<custom connector name>" --as action --non-interactive   # custom connectors bind like any action connector (ms can't create them)
 ms app add data-source --connector <id> --as action --skip-codegen --non-interactive         # no generated service (e.g. broken OpenAPI); wrap executeAsync yourself

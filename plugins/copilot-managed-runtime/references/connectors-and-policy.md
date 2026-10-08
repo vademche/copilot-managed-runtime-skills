@@ -134,12 +134,16 @@ Tags: **[doc]** documented, **[lab]** lab-verified with ms 0.27 (Oct 2026), **[i
 
 | Point | Behaviour | Message |
 |---|---|---|
-| `ms connector list` / `list-actions` | Client-side pre-check: `isBlocked`, `--only-allowed`, per-action `Allow` / `Block` [lab] | — |
+| `ms connector list` / `list-actions` | Client-side pre-check: `isBlocked`, `--only-allowed`, per-action `Allow` / `Block` [lab]. `isBlocked` tracked the ACP but stayed `false` for a connector in a classic DLP **Blocked** group; `list-actions` did show DLP connector-action rules (`behavior: "Block"`) [lab] | — |
 | `ms app add data-source` | Client-side and **fail-open** [lab]. It checks allowed/blocked only, not DLP data groups | Exit 2: `Connector '<name>' is blocked by your organization's connector policy.` If the lookup fails: `Could not verify connector policy; proceeding without enforcement.` |
 | `ms app deploy` (app save) | **Authoritative**, server-side, re-evaluated on every deploy, covers ACP **and** classic DLP [lab] | 403 `AcpDlpPolicyEvaluation`: "The app '<app-id>' cannot be saved because one or more connectors it uses '<ids>' are blocked by Advanced Connector Policy (ACP) or Data Policies (DLP) for this environment…" The violation details carry `PolicyType: AdvancedConnectorPolicy` + `ViolationType: BlockedConnector`, or `PolicyType: DLP` + `ViolationType: BusinessAndNonBusinessConnector` |
 | Connection creation, direct connector runtime calls | Not blocked by ACP in the lab [lab] | — |
+| Already-deployed app, existing connections, after a classic DLP change | **Not enforced**: calls kept working 6+ min after a data-group mix and right after the connector was moved to Blocked. The deploy at the same time returned 403 (`ViolationType: BlockedConnector`) [lab] | — |
+| DLP connection re-evaluation (`Start-DLPEnforcementOnConnectionsInEnvironment`, `POST …/scopes/admin/environments/<environment-id>/reevaluateconnectionsdlp`) | Violating connections went to `Error / ConnectionIsDisabled` within seconds; the running app's calls then failed [lab] | `{"success":false,"error":{"message":"{\"status\":400,…\"message\":\"Error from token exchange: The connection is disabled so it cannot be used.\"}"}}` |
+| New connection from the consent dialog to a DLP-**Blocked** connector | **Blocked** [lab] | `PUT /connectivity/apis/<api>/connections/<id>` → 400 `ConnectionApiPolicyViolation`: "Connection creation/edit of '<name>' has been blocked by Data Loss Prevention (DLP) policy '<policy>'." The host logs `App load failed: ConsentDenied` |
+| Classic DLP **connector action control** | **Not enforced** for CMR. `ms.config.json` lists connectors, not operations; deploy succeeded and the blocked action still ran 7.5 min later [lab]. Power Apps enforces action rules on publish [doc] | — (AP-98) |
 
-Hand-editing `ms.config.json` or `generated/` past a CLI block only moves the failure to deploy (AP-81). DLP data-group mixes surface only at deploy.
+Hand-editing `ms.config.json` or `generated/` past a CLI block only moves the failure to deploy (AP-81). DLP data-group mixes surface only at deploy. Tightening DLP doesn't stop running apps until connections are re-evaluated (AP-99). The consent dialog is served by `apps.powerapps.com/consent`, the same consent service that Power Apps uses [lab].
 
 ### Alternatives when the connector isn't allowed
 
